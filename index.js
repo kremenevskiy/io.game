@@ -4,7 +4,32 @@ var c = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
+function lerp(start, end, t){
+    return start*(1-t) + end * t;
+}
 
+
+function div(posX, posY, val){
+    return {first: posX / val,
+            second: posY / val 
+        };
+    }
+
+function limit(posX, posY, max){
+    const mSq = posX * posX + posY * posY;
+    if (mSq > max * max) {
+        posX = posX / Math.sqrt(mSq) * max;
+        posY = posY / Math.sqrt(mSq) * max;
+    }
+    return {
+        x: posX,
+        y: posY
+    }
+}
+
+
+var mouseX = 0;
+var mouseY = 0;
 
 window.addEventListener('mousemove', (event) => {
     mouseX = event.clientX;
@@ -12,8 +37,7 @@ window.addEventListener('mousemove', (event) => {
 })
 
 
-var mouseX = 0;
-var mouseY = 0;
+
 
 class Eat {
     constructor(x, y, radius, color) {
@@ -57,10 +81,27 @@ class Player {
             // x: mouseX - this.x,
             // y: mouseY - this.y
         }
-        var Mag = Math.sqrt(vel.x * vel.x + vel.y * vel.y)
-        var newMag = 3;
-        this.velocity.x = vel.x * newMag / Mag;
-        this.velocity.y = vel.y * newMag / Mag;
+        const divved = div(vel.x, vel.y, 10);
+        vel.x = divved.first;
+        vel.y = divved.second;
+
+        // var Mag = Math.sqrt(vel.x * vel.x + vel.y * vel.y)
+        // var newMag = 3;
+        // this.velocity.x = vel.x * newMag / Mag;
+        // this.velocity.y = vel.y * newMag / Mag;
+
+        // lerpting to smoothness
+        // vel.x = vel.x * newMag / Mag;
+        // vel.y = vel.y * newMag / Mag;
+
+        const limitted = limit(vel.x, vel.y, 4);
+        vel.x = limitted.x;
+        vel.y = limitted.y;
+
+
+
+        this.velocity.x = lerp(this.velocity.x, vel.x, 0.1)
+        this.velocity.y = lerp(this.velocity.y, vel.y, 0.1)
         this.x = this.x + this.velocity.x;
         this.y = this.y + this.velocity.y;
     }
@@ -71,6 +112,24 @@ class Player {
         c.fillStyle = this.color;
         c.fill();
      }
+
+     eats(other){
+         var dist =  vecDist(this.x, this.y, other.x, other.y);
+         if (dist < this.radius + other.radius){
+             var square = this.radius * this.radius * Math.PI + other.radius * other.radius * Math.PI;
+             this.radius = Math.sqrt(square / Math.PI);
+            //  this.radius += other.radius;
+             return true;
+         }
+         else {
+             return false;
+         }
+     }
+}
+
+function vecDist(v1_x, v1_y, v2_x, v2_y){
+    var d = Math.sqrt(Math.pow(v1_x-v2_x, 2) + Math.pow(v1_y-v2_y, 2));
+    return d;
 }
 
 
@@ -109,7 +168,8 @@ const rand_col = () => {
     return Math.random() * 256;
 }
 
-for(var i = 0; i < 100; ++i){
+N = 1000;
+for(var i = 0; i < N; ++i){
     eat[i] = new Eat((Math.round(Math.random()) * 2 - 1) * Math.random() * canvas.width,(Math.round(Math.random()) * 2 - 1) *  Math.random() * canvas.height, 4, 
     `rgb(${rand_col()}, ${rand_col()}, ${rand_col()})`)
 }
@@ -123,14 +183,24 @@ setInterval(() => {
 
 }, 1000);
 
+
+
+var zoom = 1;
 function animate() {
     requestAnimationFrame(animate);
     
     c.clearRect(0, 0, canvas.width, canvas.height);
+    // c.scale(30 / player.radius, 30/player.radius);
     c.save();
-    c.translate(canvas.width/2 -player.x, canvas.height/2 -player.y);
+    // c.translate(canvas.width/2 -player.x, canvas.height/2 -player.y);
+    c.translate(canvas.width/2, canvas.height/2)
+    var newZoom = 30 / player.radius;
+    zoom = lerp(zoom, newZoom, 0.1);
+    c.scale(zoom, zoom);
+    c.translate(-player.x, -player.y)
     player.draw();
     player.updateVel();
+    
     
     
 
@@ -144,7 +214,15 @@ function animate() {
     })
     c.restore();
 
+    for(var i = eat.length - 1; i >= 0; --i){
+        if (player.eats(eat[i])){
+            eat.splice(i, 1);
+        }
+    }
+
 }
+
+
 window.addEventListener('click', (event) => {
     const angle = Math.atan2(event.clientY - canvas.height / 2,
         event.clientX - canvas.width / 2);
@@ -156,7 +234,7 @@ window.addEventListener('click', (event) => {
     }
 
     projectiles.push(new Projectile(
-        canvas.weight/2, canvas.height/2,
+        player.x, player.y,
         5, 'red', velocity
     ))
     
