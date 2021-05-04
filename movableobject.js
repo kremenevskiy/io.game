@@ -7,6 +7,11 @@ class MovableObject extends Object {
         this.speed = speed;
     }
 
+    update() {
+        this.pos.x += Math.cos(this.dir) * this.speed;
+        this.pos.y += Math.sin(this.dir) * this.speed;
+    }
+
     serializeForUpdate() {
         return {
             ...(super.serializeForUpdate()),
