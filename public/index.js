@@ -1,3 +1,5 @@
+
+
 var socket;
 socket = io.connect('http://localhost:3000');
 
@@ -6,6 +8,7 @@ var c = canvas.getContext('2d');
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
+
 
 function lerp(start, end, t){
     return start*(1-t) + end * t;
@@ -70,9 +73,9 @@ class Player {
     constructor(x, y, radius, color){
         this.x = x;
         this.y = y;
-
         this.radius = radius;
         this.color = color;
+        this.dir = Math.PI * 2;
         this.velocity = {
             x: 0,
             y: 0
@@ -82,7 +85,10 @@ class Player {
 
 
     updateVel() {
-        
+
+        const angle = Math.atan2(mouseY - canvas.height / 2,
+            mouseX - canvas.width / 2);
+        this.dir = angle;
         var vel = {
             x: mouseX - canvas.width/2,
             y: mouseY - canvas.height/2,
@@ -171,56 +177,39 @@ class Projectile {
 
 
 
+
+
+
 const x = canvas.width / 2;
 const y = canvas.height / 2;
 
 var player = new Player(Math.random() * x, Math.random() * y, Math.random() * 30 + 10, 'blue');
+
+
 var data = {
     x: player.x,
     y: player.y,
-    r: player.radius
+    r: player.radius,
+    dir: player.dir,
 };
 
-var players = [];
-var eat = [];
+// console.log('sending data: ')
+// console.log(data);
 
-socket.emit('start', data);
-
-socket.on('heartbeat', 
-    function(data) {
-        players = data;  
-       
-
-        // for (var i = 0; i < players.length; i++){
-        //     console.log(players[i]);
-        // }
-        // console.log("get players: " + players)
-    }
-
-);
+socket.emit('join_game', data);
 
 
 var bullets = [];
-socket.on('heartbeatbullet', 
-    function(bulls) {
-        bullets = bulls;
-    }    
-)
-
-
-// socket.on('heartbeatfood', 
-//     function(data) {
-//         console.log("data: " + data)
-//         eat = data;  
-//         eat.forEach((ea) => {
-//             console.log(ea)
-//         })
-
-//         console.log('get food :' + eat.length)
-        
-//     }
-// );
-
+var players = [];
+var eat = [];
+socket.on('game_update',
+    function(data) {
+        console.log("update");
+        console.log(data);
+        players = data.others;
+        bullets = data.bullets;
+    }
+);
 
 
 
@@ -230,8 +219,8 @@ const rand_col = () => {
     return Math.random() * 256;
 }
 
-var N = 100;
-for(var i = 0; i < N; ++i){
+const N = 100;
+for(let i = 0; i < N; ++i){
     eat[i] = new Eat((Math.round(Math.random()) * 2 - 1) * Math.random() * canvas.width,(Math.round(Math.random()) * 2 - 1) *  Math.random() * canvas.height, 4, 
     `rgb(${rand_col()}, ${rand_col()}, ${rand_col()})`)
 }
@@ -262,19 +251,11 @@ function animate() {
     c.translate(-player.x, -player.y);
 
 
-    // for (var i = eat.length - 1; i >= 0; --i){
-    //     c.beginPath();
-    //     c.arc(eat[i].pos.x, eat[i].pos.y, eat[i].r, 0, Math.PI * 2, false); 
-    //     c.fillStyle = eat[i].color;
-    //     c.fill();
-    // }
-
-
     for (var i = players.length - 1; i >= 0; --i){
 
         if (players[i].id !== socket.id){
             c.beginPath()
-            c.arc(players[i].pos.x, players[i].pos.y, players[i].r, 0, Math.PI * 2, false); 
+            c.arc(players[i].position.x, players[i].position.y, players[i].r, 0, Math.PI * 2, false);
             c.fillStyle = 'orange';
             c.fill();
             
@@ -298,12 +279,11 @@ function animate() {
     var data = {
         x: player.x,
         y: player.y,
-        r: player.radius
+        r: player.radius,
+        id: socket.id
     };
     
-    socket.emit('update', data);
-    
-    
+    socket.emit('update_input', data);
     
 
     
@@ -311,13 +291,13 @@ function animate() {
         foody.draw();
     })
     
-    projectiles.forEach((projectile) => {
-        projectile.update();
-    })
+    // projectiles.forEach((projectile) => {
+    //     projectile.update();
+    // })
 
     bullets.forEach((bullet) => {
         c.beginPath()
-        c.arc(bullet.pos.x, bullet.pos.y, 3, 0, Math.PI * 2, false); 
+        c.arc(bullet.position.x, bullet.position.y, 8, 0, Math.PI * 2, false);
         c.fillStyle = 'red';
         c.fill();
     })
