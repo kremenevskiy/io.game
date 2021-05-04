@@ -176,4 +176,7 @@ Vector.prototype.setMag = function(n){
 Vector.prototype.lerp = function(target, amnt){
 	this.x = this.x * (1 - amnt) + target * amnt;
 	this.y = this.y * (1 - amnt) + target * amnt;
+    return this;
 }
+
+module.exports = Vector;

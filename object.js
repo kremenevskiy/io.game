@@ -1,12 +1,10 @@
-import { Vector } from './vector.js'
+const Vector = require('./vector')
 
 class Object {
     constructor(id, x, y){
         this.id = id;
         this.pos = new Vector(x, y);
     }
-
-
 
     serializeForUpdate(){
         return {
@@ -18,3 +16,6 @@ class Object {
         };
     }
 }
+
+
+module.exports = Object;

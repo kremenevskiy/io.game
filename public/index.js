@@ -126,18 +126,18 @@ class Player {
         c.fill();
      }
 
-     eats(other){
-         var dist =  vecDist(this.x, this.y, other.x, other.y);
-         if (dist < this.radius + other.radius){
-             var square = this.radius * this.radius * Math.PI + other.radius * other.radius * Math.PI;
-             this.radius = Math.sqrt(square / Math.PI);
-            //  this.radius += other.radius;
-             return true;
-         }
-         else {
-             return false;
-         }
-     }
+    //  eats(other){
+    //      var dist =  vecDist(this.x, this.y, other.x, other.y);
+    //      if (dist < this.radius + other.radius){
+    //          var square = this.radius * this.radius * Math.PI + other.radius * other.radius * Math.PI;
+    //          this.radius = Math.sqrt(square / Math.PI);
+    //         //  this.radius += other.radius;
+    //          return true;
+    //      }
+    //      else {
+    //          return false;
+    //      }
+    //  }
 }
 
 function vecDist(v1_x, v1_y, v2_x, v2_y){
@@ -181,25 +181,48 @@ var data = {
     r: player.radius
 };
 
-players = [];
+var players = [];
+var eat = [];
+
 socket.emit('start', data);
+
 socket.on('heartbeat', 
     function(data) {
         players = data;  
+       
+
+        // for (var i = 0; i < players.length; i++){
+        //     console.log(players[i]);
+        // }
+        // console.log("get players: " + players)
     }
+
 );
 
 
+// socket.on('heartbeatfood', 
+//     function(data) {
+//         console.log("data: " + data)
+//         eat = data;  
+//         eat.forEach((ea) => {
+//             console.log(ea)
+//         })
+
+//         console.log('get food :' + eat.length)
+        
+//     }
+// );
 
 
-eat = [];
+
+
 
 
 const rand_col = () => {
     return Math.random() * 256;
 }
 
-N = 1000;
+var N = 1000;
 for(var i = 0; i < N; ++i){
     eat[i] = new Eat((Math.round(Math.random()) * 2 - 1) * Math.random() * canvas.width,(Math.round(Math.random()) * 2 - 1) *  Math.random() * canvas.height, 4, 
     `rgb(${rand_col()}, ${rand_col()}, ${rand_col()})`)
@@ -228,7 +251,36 @@ function animate() {
     var newZoom = 30 / player.radius;
     zoom = lerp(zoom, newZoom, 0.1);
     c.scale(zoom, zoom);
-    c.translate(-player.x, -player.y)
+    c.translate(-player.x, -player.y);
+
+
+    // for (var i = eat.length - 1; i >= 0; --i){
+    //     c.beginPath();
+    //     c.arc(eat[i].pos.x, eat[i].pos.y, eat[i].r, 0, Math.PI * 2, false); 
+    //     c.fillStyle = eat[i].color;
+    //     c.fill();
+    // }
+
+
+    for (var i = players.length - 1; i >= 0; --i){
+
+        if (players[i].id !== socket.id){
+            c.beginPath()
+            c.arc(players[i].pos.x, players[i].pos.y, players[i].r, 0, Math.PI * 2, false); 
+            c.fillStyle = 'orange';
+            c.fill();
+            
+            // c.beginPath();
+            // c.fillStyle = "white";
+            // c.textAlign = "center";
+            // c.font = '10px serif';
+            // c.fillText(players[i].id, players[i].x, players[i].y);
+            // c.fill();
+        }
+        
+    }
+
+
     player.draw();
 
     player.updateVel();
@@ -256,11 +308,15 @@ function animate() {
     })
     c.restore();
 
-    for(var i = eat.length - 1; i >= 0; --i){
-        if (player.eats(eat[i])){
-            eat.splice(i, 1);
-        }
-    }
+    // for(var i = eat.length - 1; i >= 0; --i){
+    //     if (player.eats(eat[i])){
+    //         eat.splice(i, 1);
+    //         socket.emit('updateeat', eat);
+    //     }
+    // }
+
+
+    // socket.emit('updateeat', eat)
 
 }
 
