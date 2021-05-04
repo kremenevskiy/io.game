@@ -79,12 +79,12 @@ Vector.prototype.mult = function(x, y) {
 
 	const args = [...arguments];
 	if (args.length === 1) {
-		this.x *= x;
-		this.y *= x;
+		this.x *= args[0];
+		this.y *= args[0];
 	}
 	if (args.length === 2) {
-		this.x *= x;
-		this.y *= y;
+		this.x *= args[0];
+		this.y *= args[1];
 	}
 	return this;
 }
@@ -122,12 +122,12 @@ Vector.prototype.div = function(x, y) {
 			throw new Error('Div by zero');
 	}
 	if (args.length === 1) {
-		this.x /= x;
-		this.y /= x;
+		this.x /= args[0];
+		this.y /= args[0];
 	}
 	if (args.length === 2) {
-		this.x /= x;
-		this.y /= y;
+		this.x /= args[0];
+		this.y /= args[1];
 	}
 	return this;
 }
