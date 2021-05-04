@@ -2,17 +2,32 @@ const MovableObject = require('./movableobject')
 const Constants = require('./constants')
 
 class Player extends MovableObject {
-    constructor(id, x, y, r) {
+    constructor(id, username, x, y, r) {
+        // console.log('-------------------------');
+        // var args = [...arguments];
+        //
+        // console.log(username)
+        // console.log(x + " | " + y + " | " + r)
+        // console.log("agruments:-------------------------")
+        // console.log(args)
         super(id, x, y, Math.random() * 2 * Math.PI, Constants.PLAYERS_SPEED)
-        // this.username = username;
+        this.username = username;
         this.hp = Constants.PLAYER_MAX_HP;
         this.score = 0;
         this.r = r;
+
+    }
+
+    update(x, y, dir){
+        this.pos.x = x;
+        this.pos.y = y;
+        this.dir = dir;
     }
 
     serializeForUpdate() {
         return {
             ...(super.serializeForUpdate()),
+            r: this.r,
             hp: this.hp
         }
     }
