@@ -200,6 +200,14 @@ socket.on('heartbeat',
 );
 
 
+var bullets = [];
+socket.on('heartbeatbullet', 
+    function(bulls) {
+        bullets = bulls;
+    }    
+)
+
+
 // socket.on('heartbeatfood', 
 //     function(data) {
 //         console.log("data: " + data)
@@ -222,7 +230,7 @@ const rand_col = () => {
     return Math.random() * 256;
 }
 
-var N = 1000;
+var N = 100;
 for(var i = 0; i < N; ++i){
     eat[i] = new Eat((Math.round(Math.random()) * 2 - 1) * Math.random() * canvas.width,(Math.round(Math.random()) * 2 - 1) *  Math.random() * canvas.height, 4, 
     `rgb(${rand_col()}, ${rand_col()}, ${rand_col()})`)
@@ -306,6 +314,14 @@ function animate() {
     projectiles.forEach((projectile) => {
         projectile.update();
     })
+
+    bullets.forEach((bullet) => {
+        c.beginPath()
+        c.arc(bullet.pos.x, bullet.pos.y, 3, 0, Math.PI * 2, false); 
+        c.fillStyle = 'red';
+        c.fill();
+    })
+
     c.restore();
 
     // for(var i = eat.length - 1; i >= 0; --i){
@@ -324,18 +340,26 @@ function animate() {
 window.addEventListener('click', (event) => {
     const angle = Math.atan2(event.clientY - canvas.height / 2,
         event.clientX - canvas.width / 2);
-    console.log(angle*180/Math.PI);
+    
 
     const velocity = {
         x: Math.cos(angle),
         y: Math.sin(angle)
     }
 
+    var bulletData = {
+        x: player.x,
+        y: player.y,
+        dir: angle
+    }
+
+    console.log('newbullet with: ' + bulletData.x + "Y: " + bulletData.y)
+    socket.emit('newbullet', bulletData);
+
     projectiles.push(new Projectile(
         player.x, player.y,
         5, 'red', velocity
     ))
     
-    console.log(projectiles.length);
 })
 animate();

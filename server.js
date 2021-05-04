@@ -1,6 +1,7 @@
 const Player = require('./player')
 var express = require('express');
 const Food = require('./food')
+const Bullet = require('./bullet')
 
 
 const width = 1000;
@@ -20,6 +21,8 @@ app.use(express.static('public'));
 
 var io = require('socket.io')(server);
 var players = [];
+var bullets = [];
+
 
 function getRandomColor() {
     var letters = '0123456789ABCDEF';
@@ -55,6 +58,13 @@ function getRandomColor() {
 setInterval(heartbeat, 30);
 
 function heartbeat() {
+
+    bullets.forEach((bullet) => {
+        bullet.update();
+    })
+
+
+    io.sockets.emit('heartbeatbullet', bullets);
 
     // players.forEach((player) => {
     //     for (var i = 0; i < eat.length; i++){
@@ -118,6 +128,14 @@ function newConnection(socket){
             player.r = data.r;
         }
     );
+
+
+    socket.on('newbullet', 
+        function(bulletdata){
+            bullets.push(new Bullet(bullets.length+1, bulletdata.x, bulletdata.y, bulletdata.dir))
+            console.log("generated new bullet: " + bullets[bullets.length-1])
+        }
+    )
 
     socket.on('disconnect',
         function() {
