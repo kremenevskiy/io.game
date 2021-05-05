@@ -1,5 +1,5 @@
 const MovableObject = require('./movableobject')
-const Constants = require('./constants')
+const Constants = require('../shared/constants')
 
 
 class Bullet extends MovableObject {

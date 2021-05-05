@@ -1,5 +1,5 @@
 const Object = require('./object');
-const Constants = require('./constants')
+const Constants = require('../shared/constants')
 
 class Food extends Object {
     constructor(id, x, y, color) {

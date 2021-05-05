@@ -1,4 +1,4 @@
-const Constants = require('./constants')
+const Constants = require('../shared/constants')
 const Player = require('./player')
 const Bullet = require('./bullet')
 

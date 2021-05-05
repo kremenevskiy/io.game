@@ -204,8 +204,8 @@ var players = [];
 var eat = [];
 socket.on('game_update',
     function(data) {
-        console.log("update");
-        console.log(data);
+        // console.log("update");
+        // console.log(data);
         players = data.others;
         bullets = data.bullets;
     }
@@ -297,7 +297,7 @@ function animate() {
 
     bullets.forEach((bullet) => {
         c.beginPath()
-        c.arc(bullet.position.x, bullet.position.y, 8, 0, Math.PI * 2, false);
+        c.arc(bullet.position.x, bullet.position.y, 8   , 0, Math.PI * 2, false);
         c.fillStyle = 'red';
         c.fill();
     })

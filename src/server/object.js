@@ -1,5 +1,5 @@
 const Vector = require('./vector')
-const Constants = require('./constants')
+const Constants = require('../shared/constants')
 
 class Object {
     constructor(id, x, y){

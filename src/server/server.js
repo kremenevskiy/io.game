@@ -2,7 +2,7 @@ const Player = require('./player')
 var express = require('express');
 const Food = require('./food')
 const Bullet = require('./bullet')
-const Constants = require('./constants')
+const Constants = require('../shared/constants')
 const Room = require('./room')
 const Vector = require('./vector')
 
@@ -19,7 +19,7 @@ function listen(){
     console.log("Server listening on http://" + host + ":" + port);
 }
 
-app.use(express.static('public'));
+app.use(express.static('client'));
 
 
 var io = require('socket.io')(server);
