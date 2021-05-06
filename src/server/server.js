@@ -78,7 +78,7 @@ function addBullet(bulletdata){
 
 
 function onDisconnect(){
-    console.log("Player: " + this.id + "disconnected!");
+    console.log("Player: " + this.id + " disconnected!");
     room.removePlayer(this);
 }
 
