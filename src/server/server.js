@@ -42,7 +42,7 @@ function newConnection(socket){
     console.log("New client: " + socket.id);
     socket.on(Constants.MSG_TYPES.JOIN_GAME, joinGame);
     socket.on(Constants.MSG_TYPES.UPDATE_INPUT, updatePlayer);
-    socket.on('newbullet', addBullet);
+    socket.on(Constants.MSG_TYPES.NEW_BULLET, addBullet);
     socket.on('disconnect', onDisconnect);
 
 }
@@ -57,13 +57,15 @@ function joinGame(username='krem'){
 }
 
 var cnt = 0;
-function updatePlayer(data){
+function updatePlayer(update_data){
+    console.log('got new move from player!')
+    console.log(update_data)
     // if (cnt < 3) {
     //     console.log('before player update:')
     //     console.log(room.players[this.id]);
     // }
     const playerId = this.id;
-    room.updatePlayer(playerId, data.x, data.y, data.dir);
+    room.updatePlayer(playerId, update_data);
     // if (cnt < 3) {
     //     console.log('after updating')
     //     console.log(room.players[this.id])
@@ -72,8 +74,8 @@ function updatePlayer(data){
 }
 
 
-function addBullet(bulletdata){
-    room.addBullet(this.id, bulletdata.x, bulletdata.y, bulletdata.dir);
+function addBullet(dir){
+    room.addBullet(this.id, dir);
 }
 
 
@@ -81,22 +83,3 @@ function onDisconnect(){
     console.log("Player: " + this.id + " disconnected!");
     room.removePlayer(this);
 }
-
-
-// var v = new Vector(2, 3);
-// class someClass {
-//     constructor(x, y){
-//         this.vec = new Vector(x, y);
-//         this.somevar = 'krem'
-//     }
-// }
-//
-//
-// var some = new someClass(100, 200);
-
-//
-// console.log('vector');
-// console.log(v)
-// console.log('someclass');
-// console.log(some);
-

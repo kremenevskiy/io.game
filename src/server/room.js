@@ -7,7 +7,7 @@ class Room {
         this.sockets = {};
         this.players = {};
         this.bullets = [];
-        setInterval(this.update.bind(this), 1000/30);
+        setInterval(this.update.bind(this), 1000/20);
     }
 
     addPlayer(socket, username='krem'){
@@ -21,13 +21,15 @@ class Room {
     }
 
 
-    addBullet(bulletID, bullet_x, bullet_y, bullet_dir){
+    addBullet(bulletID, bullet_dir){
+        const bullet_x = this.players[bulletID].pos.x;
+        const bullet_y = this.players[bulletID].pos.y;
         this.bullets.push(new Bullet(bulletID, bullet_x, bullet_y, bullet_dir));
-        console.log('number of bullets: ' + this.bullets.length)
+        // console.log('number of bullets: ' + this.bullets.length)
     }
 
 
-    updatePlayer(playerID, x, y, dir){
+    updatePlayer(playerID, update_data){
 
 
         // console.log("player to update id: " + playerID);
@@ -39,7 +41,15 @@ class Room {
             // console.log('updating him:')
             // console.log(this.players[playerID])
             // console.log("with: x:" + x + "y: " + y + "dir: " + dir)
-            this.players[playerID].update(x, y, dir);
+            const dir = update_data.dir;
+            const vel_mid_x = update_data.vel_mid.x;
+            const vel_mid_y = update_data.vel_mid.y;
+
+            console.log('dir: ' + dir + " x: " + vel_mid_x + "y: " + vel_mid_y)
+
+            this.players[playerID].vel_mid.x = vel_mid_x;
+            this.players[playerID].vel_mid.y = vel_mid_y;
+            this.players[playerID].updateDirection(dir);
         }
     }
 
@@ -58,6 +68,9 @@ class Room {
             }
         });
         this.bullets = this.bullets.filter(bullet => !bulletsToRemove.includes(bullet));
+
+        // update every player position
+        Object.values(this.players).forEach(player => player.update());
 
 
         // console.log('\t\t\t\t\t------------------uuuuuuupdate')
@@ -90,6 +103,13 @@ class Room {
     }
 
     createUpdate(player){
+        // console.log('sending update');
+        var data = {
+            me: player.serializeForUpdate(),
+            others: Object.values(this.players).map(p => p.serializeForUpdate()),
+            bullets: this.bullets.map(b => b.serializeForUpdate())
+        };
+        // console.log(data);
         // console.log('before update:');
         // console.log(player)
         return {

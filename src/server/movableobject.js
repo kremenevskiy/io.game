@@ -12,6 +12,11 @@ class MovableObject extends Object {
         this.pos.y += Math.sin(this.dir) * this.speed;
     }
 
+
+    updateDirection(dir) {
+        this.dir = dir;
+    }
+
     serializeForUpdate() {
         return {
             ...(super.serializeForUpdate()),

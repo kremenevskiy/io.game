@@ -2,3 +2,27 @@ body {
     margin: 0;
     background-color: white;
 }
+
+
+button {
+    font-size: 18px;
+    outline: none;
+    border: none;
+    color: black;
+    background-color: transparent;
+    padding: 5px 20px;
+    border-radius: 3px;
+    transition: background-color 0.2s ease;
+}
+
+button:hover {
+    background-color: rgb(230, 230, 230);
+}
+
+button:focus {
+    outline: none;
+}
+
+.hidden {
+    display: none !important;
+}

@@ -27,8 +27,15 @@ Vector.prototype.copy = function() {
 
 Vector.prototype.add = function(x, y) {
 	if (x instanceof Vector) {
+		console.log('vec: x' + this.x + " y: " + this.y)
+		if (x.x !== 0){
+			console.log('\t\tAddvec: x' + x.x + " y: " + x.y)
+		}
+
 		this.x += x.x;
 		this.y += x.y;
+		console.log('res vec: x' + this.x + " y: " + this.y)
+		console.log('doing add')
 		return this;
 	}
 	if (x instanceof Array) {
@@ -173,10 +180,20 @@ Vector.prototype.setMag = function(n){
 }
 
 
+// Vector.prototype.lerp = function(x, y, amt){
+// 	if (x instanceof Vector) {
+// 		return this.lerp(x.x, x.y, x.z, y)
+// 	}
+// 	this.x += (x - this.x) * amt || 0;
+// 	this.y += (y - this.y) * amt || 0;
+// 	return this;
+// }
+
+
 Vector.prototype.lerp = function(target, amnt){
-	this.x = this.x * (1 - amnt) + target * amnt;
-	this.y = this.y * (1 - amnt) + target * amnt;
-    return this;
+	this.x = this.x * (1 - amnt) + target.x * amnt;
+	this.y = this.y * (1 - amnt) + target.y * amnt;
+	return this;
 }
 
 module.exports = Vector;

@@ -9,11 +9,11 @@ module.exports = Object.freeze({
 
     FOOD_RADIUS: 4,
 
-    MAP_SIZE: 3000,
+    MAP_SIZE: 700,
     MSG_TYPES: {
 
         UPDATE_INPUT: 'update_input',
-
+        NEW_BULLET: 'new_bullet',
         JOIN_GAME: 'join_game',
         GAME_UPDATE: 'game_update',
         GAME_OVER: 'dead'

@@ -1,5 +1,6 @@
 const MovableObject = require('./movableobject')
 const Constants = require('../shared/constants')
+const Vector = require('./vector')
 
 class Player extends MovableObject {
     constructor(id, username, x, y, r) {
@@ -15,13 +16,25 @@ class Player extends MovableObject {
         this.hp = Constants.PLAYER_MAX_HP;
         this.score = 0;
         this.r = r;
+        this.vel_mid = new Vector(0, 0);
+        this.velocity = new Vector(-1, 1);
 
     }
 
-    update(x, y, dir){
-        this.pos.x = x;
-        this.pos.y = y;
-        this.dir = dir;
+    update(){
+        // console.log("updating player from: x: " + this.pos.x + "y: " + this.pos.y)
+        var vel = new Vector(this.vel_mid.x, this.vel_mid.y)
+        // console.log("vel to update: x:" + vel.x + " y: " + vel.y);
+        vel.div(10);
+        vel.limit(4);
+        console.log("\t\t\tvelocity new  to update: x:" + this.velocity.x + " y: " + this.velocity.y);
+
+        this.velocity.lerp(vel, 0.1);
+        console.log("\t\t\tvelocity lerp:: x:" + this.velocity.x + " y: " + this.velocity.y);
+
+        this.pos.add(this.velocity);
+        console.log("to x: " + this.pos.x + "y: " + this.pos.y)
+
     }
 
     serializeForUpdate() {

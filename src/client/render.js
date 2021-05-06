@@ -1,5 +1,8 @@
 import {mouseX} from './input'
 import {mouseY} from './input'
+import {getCurrentState} from "./state";
+import {socket} from './networking'
+import {eat} from "./index";
 
 function lerp(start, end, t){
     return start*(1-t) + end * t;
@@ -28,8 +31,6 @@ function limit(posX, posY, max){
 function constrain(x, min, max) {
     return Math.max(Math.min(x, max), min);
 }
-
-
 
 
 export class Eat {
@@ -165,28 +166,31 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 var zoom = 1;
-export function animate(player, players, bullets, eat, socket) {
-    // requestAnimationFrame(animate.bind(this));
-    console.log("args: " + arguments)
-    console.log('drawing bullets: ' + bullets.length);
-    console.log('players: ' + players.length);
+
+
+function render() {
+    // console.log('try rendering')
+    if (!getCurrentState()){
+        console.log('no update yet for render')
+        return;
+    }
+    const {me, others, bullets} = getCurrentState();
+    if (!me || !others ){
+        return;
+    }
     c.clearRect(0, 0, canvas.width, canvas.height);
-    // c.scale(30 / player.radius, 30/player.radius);
     c.save();
-    // c.translate(canvas.width/2 -player.x, canvas.height/2 -player.y);
-    c.translate(canvas.width/2, canvas.height/2)
-    var newZoom = 30 / player.radius;
+    c.translate(canvas.width/2, canvas.height/2);
+    var newZoom = 30 / me.r;
     zoom = lerp(zoom, newZoom, 0.1);
     c.scale(zoom, zoom);
-    c.translate(-player.x, -player.y);
+    c.translate(-me.position.x, -me.position.y);
+    for (var i = others.length - 1; i >= 0; --i){
 
-
-    for (var i = players.length - 1; i >= 0; --i){
-
-        if (players[i].id !== socket.id){
-            console.log('drawing pllayer: '+ players[i].position.x + " " +  players[i].position.y + " " +  players[i].r)
+        if (others[i].id !== socket.id){
+            console.log('drawing pllayer: '+ others[i].position.x + " " +  others[i].position.y + " " +  others[i].r)
             c.beginPath()
-            c.arc(players[i].position.x, players[i].position.y, players[i].r, 0, Math.PI * 2, false);
+            c.arc(others[i].position.x, others[i].position.y, others[i].r, 0, Math.PI * 2, false);
             c.fillStyle = 'orange';
             c.fill();
 
@@ -200,35 +204,15 @@ export function animate(player, players, bullets, eat, socket) {
 
     }
 
-
-    player.draw();
-
-    player.updateVel();
-    player.constr();
-
-
-    var data = {
-        x: player.x,
-        y: player.y,
-        r: player.radius,
-        id: socket.id
-    };
-
-    socket.emit('update_input', data);
-
-
-
     eat.forEach((foody) => {
         foody.draw();
     })
 
-    // projectiles.forEach((projectile) => {
-    //     projectile.update();
-    // })
 
-    if (bullets.length > 1) {
-        console.log('drawing bullet!!')
-    }
+    c.beginPath()
+    c.arc(me.position.x, me.position.y, me.r, 0, Math.PI * 2, false);
+    c.fillStyle = 'red';
+    c.fill();
     bullets.forEach((bullet) => {
         c.beginPath()
         c.arc(bullet.position.x, bullet.position.y, 8   , 0, Math.PI * 2, false);
@@ -237,15 +221,131 @@ export function animate(player, players, bullets, eat, socket) {
     })
 
     c.restore();
-
-    // for(var i = eat.length - 1; i >= 0; --i){
-    //     if (player.eats(eat[i])){
-    //         eat.splice(i, 1);
-    //         socket.emit('updateeat', eat);
-    //     }
-    // }
-
-
-    // socket.emit('updateeat', eat)
-
 }
+
+var renderInterval = setInterval(() => {
+    console.log('first try')
+}, 1000/2)
+
+export function startRendering() {
+    clearInterval(renderInterval)
+    renderInterval = setInterval(render, 1000/60);
+}
+
+export function stopRendering() {
+    clearInterval(renderInterval);
+    renderInterval = setInterval(() => {
+        console.log('not rendering')
+    }, 2000);
+}
+
+
+
+
+
+
+// export function animate(player, players, bullets, eat, socket) {
+//     // requestAnimationFrame(animate.bind(this));
+//     // console.log("args: " + arguments)
+//     // console.log('drawing bullets: ' + bullets.length);
+//     // console.log('players: ' + players.length);
+//
+//     // const {player, others, bullets} = getCurrentState();
+//
+//
+//     c.clearRect(0, 0, canvas.width, canvas.height);
+//     // c.scale(30 / player.radius, 30/player.radius);
+//     c.save();
+//     // c.translate(canvas.width/2 -player.x, canvas.height/2 -player.y);
+//     c.translate(canvas.width/2, canvas.height/2)
+//     var newZoom = 30 / player.radius;
+//     zoom = lerp(zoom, newZoom, 0.1);
+//     c.scale(zoom, zoom);
+//     c.translate(-player.position.x, -player.position.y);
+//     eat.forEach((foody) => {
+//         foody.draw();
+//
+//
+//
+//     })
+//
+//
+//
+//
+//
+//
+//
+//     for (var i = players.length - 1; i >= 0; --i){
+//
+//         if (players[i].id !== socket.id){
+//             console.log('drawing pllayer: '+ players[i].position.x + " " +  players[i].position.y + " " +  players[i].r)
+//             c.beginPath()
+//             c.arc(players[i].position.x, players[i].position.y, players[i].r, 0, Math.PI * 2, false);
+//             c.fillStyle = 'orange';
+//             c.fill();
+//
+//             // c.beginPath();
+//             // c.fillStyle = "white";
+//             // c.textAlign = "center";
+//             // c.font = '10px serif';
+//             // c.fillText(players[i].id, players[i].x, players[i].y);
+//             // c.fill();
+//         }
+//
+//     }
+//
+//
+//     c.beginPath()
+//     c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+//     c.fillStyle = this.color;
+//     c.fill();
+//
+//
+//     // player.draw();
+//
+//     // player.updateVel();
+//     // player.constr();
+//
+//
+//     var data = {
+//         x: player.x,
+//         y: player.y,
+//         r: player.radius,
+//         id: socket.id
+//     };
+//
+//     socket.emit('update_input', data);
+//
+//
+//
+//     eat.forEach((foody) => {
+//         foody.draw();
+//     })
+//
+//     // projectiles.forEach((projectile) => {
+//     //     projectile.update();
+//     // })
+//
+//     if (bullets.length > 1) {
+//         console.log('drawing bullet!!')
+//     }
+//     bullets.forEach((bullet) => {
+//         c.beginPath()
+//         c.arc(bullet.position.x, bullet.position.y, 8   , 0, Math.PI * 2, false);
+//         c.fillStyle = 'red';
+//         c.fill();
+//     })
+//
+//     c.restore();
+//
+//     // for(var i = eat.length - 1; i >= 0; --i){
+//     //     if (player.eats(eat[i])){
+//     //         eat.splice(i, 1);
+//     //         socket.emit('updateeat', eat);
+//     //     }
+//     // }
+//
+//
+//     // socket.emit('updateeat', eat)
+//
+// }
