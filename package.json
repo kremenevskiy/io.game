@@ -4,8 +4,11 @@
   "description": "io game for playing in browser",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "build": "cross-env NODE_ENV=production webpack --mode production",
+    "start": "cross-env NODE_ENV=production node src/server/server.js",
+    "dev": "cross-env NODE_ENV=development webpack --mode development",
+    "develop": "cross-env NODE_ENV=development node src/server/server.js",
+    "all": "cross-env NODE_ENV=development webpack --mode development && echo \"\n\n\" && node src/server/server.js"
   },
   "repository": {
     "type": "git",
@@ -26,6 +29,19 @@
   "homepage": "https://github.com/kremenevskiy/io.game#readme",
   "dependencies": {
     "express": "^4.17.1",
-    "socket.io": "^4.0.1"
+    "html-webpack-plugin": "^5.3.1",
+    "socket.io": "^4.0.1",
+    "webpack": "^5.36.2"
+  },
+  "devDependencies": {
+    "clean-webpack-plugin": "^4.0.0-alpha.0",
+    "copy-webpack-plugin": "^8.1.1",
+    "cross-env": "^7.0.3",
+    "css-loader": "^5.2.4",
+    "file-loader": "^6.2.0",
+    "mini-css-extract-plugin": "^1.6.0",
+    "optimize-css-assets-webpack-plugin": "^5.0.4",
+    "terser-webpack-plugin": "^5.1.1",
+    "webpack-cli": "^4.6.0"
   }
 }
