@@ -5,6 +5,7 @@ const Bullet = require('./bullet')
 const Constants = require('../shared/constants')
 const Room = require('./room')
 const Vector = require('./vector')
+const path = require('path')
 
 
 const width = 1000;
@@ -19,7 +20,8 @@ function listen(){
     console.log("Server listening on http://" + host + ":" + port);
 }
 
-app.use(express.static('client'));
+
+app.use(express.static('dist'));
 
 
 var io = require('socket.io')(server);
