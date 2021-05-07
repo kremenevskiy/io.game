@@ -27,15 +27,15 @@ Vector.prototype.copy = function() {
 
 Vector.prototype.add = function(x, y) {
 	if (x instanceof Vector) {
-		console.log('vec: x' + this.x + " y: " + this.y)
-		if (x.x !== 0){
-			console.log('\t\tAddvec: x' + x.x + " y: " + x.y)
-		}
+		// console.log('vec: x' + this.x + " y: " + this.y)
+		// if (x.x !== 0){
+		// 	console.log('\t\tAddvec: x' + x.x + " y: " + x.y)
+		// }
 
 		this.x += x.x;
 		this.y += x.y;
-		console.log('res vec: x' + this.x + " y: " + this.y)
-		console.log('doing add')
+		// console.log('res vec: x' + this.x + " y: " + this.y)
+		// console.log('doing add')
 		return this;
 	}
 	if (x instanceof Array) {
