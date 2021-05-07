@@ -109,6 +109,16 @@ class Room {
         Object.values(this.players).forEach(player => player.update());
 
 
+        // check if players can eat food nearby and eat it
+        Object.values(this.players).forEach(player => {
+            for(let i = 0; i < this.foods.length; ++i) {
+                if (player.eatsFood(this.foods[i])){
+                    this.foods.splice(i, 1);
+                }
+            }
+        })
+
+
 
         // console.log('\t\t\t\t\t------------------uuuuuuupdate')
         // console.log(this.players)

@@ -46,11 +46,11 @@ class Player extends MovableObject {
         }
     }
 
-    eats(other){
-        var dist = this.pos.dist(other.pos);
-        if (dist < this.r + other.r){
-            var square = this.r * this.r * Math.PI + other.r * other.r * Math.PI;
-            this.r = Math.sqrt(square / Math.PI);
+    eatsFood(food){
+        var dist = this.pos.dist(food.pos);
+        if (dist < this.r + food.r){
+            var square_area = this.r * this.r * Math.PI + food.r * food.r * Math.PI;
+            this.r = Math.sqrt(square_area / Math.PI);
            //  this.radius += other.radius;
             return true;
         }
