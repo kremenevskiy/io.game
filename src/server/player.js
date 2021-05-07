@@ -28,6 +28,7 @@ class Player extends MovableObject {
         this.vel_mid = new Vector(0, 0);
         this.velocity = new Vector(-1, 1);
         this.color = getRandomColor();
+        this.damage = Constants.BULLET_DAMAGE;
 
     }
 
@@ -68,6 +69,15 @@ class Player extends MovableObject {
         else {
             return false;
         }
+    }
+
+
+    takeBulletDamage(damage=Constants.BULLET_DAMAGE){
+        this.hp -= damage;
+    }
+
+    causedDamage(scoreHit=Constants.SCORE_BULLET_HIT){
+        this.score += scoreHit;
     }
 }
 
