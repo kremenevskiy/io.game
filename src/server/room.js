@@ -65,6 +65,26 @@ class Room {
     }
 
 
+    applyCollisions(players, bullets){
+        const destroyedBullets = [];
+        for(let i = 0; i < bullets.length; ++i) {
+            for(let j = 0; j < players.length; ++j) {
+                const bullet = bullets[i];
+                const player = players[j];
+
+                if (bullet.parentID !== player.id &&
+                    player.pos.dist(bullet.pos) <= player.r + bullet.r){
+                    destroyedBullets.push(bullet);
+                    player.takeBulletDamage(bullet.damage);
+                    // console.log('player got damage ' + player.id + " from: " + this.players[bullet.id].id)
+                    break;
+                }
+            }
+        }
+        return destroyedBullets;
+    }
+
+
     updatePlayer(playerID, update_data){
 
 
@@ -117,6 +137,16 @@ class Room {
                 }
             }
         })
+
+        // Check if someone got damage
+        // Give score to player hwo caused damage
+        const destroyedBullets = this.applyCollisions(Object.values(this.players), this.bullets);
+        destroyedBullets.forEach(b => {
+            if (this.players[b.parentID]){
+                this.players[b.parentID].causedDamage()
+            }
+        })
+        this.bullets = this.bullets.filter(bullet => !destroyedBullets.includes(bullet));
 
 
 
