@@ -51,6 +51,7 @@ function newConnection(socket){
 
 
 const room = new Room();
+room.setup();
 function joinGame(username='krem'){
     console.log('joining game: ' + this.id);
     room.addPlayer(this, 'kremenevskiy');

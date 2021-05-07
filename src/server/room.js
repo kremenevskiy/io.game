@@ -1,14 +1,47 @@
 const Constants = require('../shared/constants')
 const Player = require('./player')
 const Bullet = require('./bullet')
+const Food = require('./food')
 
 class Room {
     constructor() {
         this.sockets = {};
         this.players = {};
         this.bullets = [];
+        this.max_food_amount = 100;
+        this.foods = [];
         setInterval(this.update.bind(this), 1000/60);
+        setInterval(this.updateFood.bind(this), 1000);
+
+
     }
+
+
+    setup(){
+        // adding start food
+        const start_food_amount = 20;
+        for(let i = 0; i < start_food_amount; ++i) {
+            this.foods.push(this.generateOneFood());
+        }
+    }
+
+    updateFood() {
+        if (this.foods.length < this.max_food_amount) {
+            var generate = Math.random();
+            if (generate > 0.5){
+                this.foods.push(this.generateOneFood());
+            }
+        }
+    }
+
+
+    generateOneFood(){
+        const x = Math.floor((Math.random() * 2 - 1) * Constants.MAP_SIZE);
+        const y = Math.floor((Math.random() * 2 - 1) * Constants.MAP_SIZE);
+        const id = this.foods.length;
+        return new Food(id, x, y);
+    }
+
 
     addPlayer(socket, username='krem'){
         this.sockets[socket.id] = socket;
@@ -20,6 +53,8 @@ class Room {
         // console.log('after creation new player:');
         // console.log(this.players[socket.id]);
     }
+
+
 
 
     addBullet(bulletID, bullet_dir){
@@ -74,6 +109,7 @@ class Room {
         Object.values(this.players).forEach(player => player.update());
 
 
+
         // console.log('\t\t\t\t\t------------------uuuuuuupdate')
         // console.log(this.players)
 
@@ -110,13 +146,16 @@ class Room {
             others: Object.values(this.players).map(p => p.serializeForUpdate()),
             bullets: this.bullets.map(b => b.serializeForUpdate())
         };
+
+        // console.log(this.foods.map(f => f.serializeForUpdate()));
         // console.log(data);
         // console.log('before update:');
         // console.log(player)
         return {
             me: player.serializeForUpdate(),
             others: Object.values(this.players).map(p => p.serializeForUpdate()),
-            bullets: this.bullets.map(b => b.serializeForUpdate())
+            bullets: this.bullets.map(b => b.serializeForUpdate()),
+            food: this.foods.map(f => f.serializeForUpdate())
         }
     }
 }

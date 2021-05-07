@@ -174,7 +174,8 @@ function render() {
         console.log('no update yet for render')
         return;
     }
-    const {me, others, bullets} = getCurrentState();
+    const {me, others, bullets, food} = getCurrentState();
+    // console.log(food);
     if (!me || !others ){
         return;
     }
@@ -204,8 +205,11 @@ function render() {
 
     }
 
-    eat.forEach((foody) => {
-        foody.draw();
+    food.forEach((foody) => {
+        c.beginPath()
+        c.arc(foody.position.x, foody.position.y, 4   , 0, Math.PI * 2, false);
+        c.fillStyle = foody.color;
+        c.fill();
     })
 
 
