@@ -15,7 +15,6 @@ export const connectedPromise = new Promise(resolve => {
 
 export const connect = onGameOver => {
     connectedPromise.then(() => {
-        console.log('connnnnected')
         socket.on(Constants.MSG_TYPES.GAME_UPDATE, processGameUpdate);
         socket.on('disconnect', () => {
             console.log('Disconnected from server')
@@ -28,8 +27,8 @@ export const play = username => {
 }
 
 export const updateDirection = throttle(100, (update_data) => {
-    console.log('sending new data to server');
-    console.log(update_data)
+    // console.log('sending new data to server');
+    // console.log(update_data)
     socket.emit(Constants.MSG_TYPES.UPDATE_INPUT, update_data);
 })
 

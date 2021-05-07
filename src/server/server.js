@@ -58,8 +58,8 @@ function joinGame(username='krem'){
 
 var cnt = 0;
 function updatePlayer(update_data){
-    console.log('got new move from player!')
-    console.log(update_data)
+    // console.log('got new move from player!')
+    // console.log(update_data)
     // if (cnt < 3) {
     //     console.log('before player update:')
     //     console.log(room.players[this.id]);

@@ -31,9 +31,6 @@ function handleMove(x, y) {
             y: mouseY - window.innerHeight / 2
         }
     }
-    // setInterval(() => {
-    //     console.log(angle)
-    // }, 1000);
     updateDirection(update_data);
 }
 
