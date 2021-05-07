@@ -104,12 +104,12 @@ export class Player {
     }
 
     constr(){
-        this.x = constrain(this.x, -canvas.width, canvas.width)
-        this.y = constrain(this.y, -canvas.height, canvas.height)
+        this.x = constrain(this.x, -canvas.width, canvas.width);
+        this.y = constrain(this.y, -canvas.height, canvas.height);
     }
 
     draw() {
-        c.beginPath()
+        c.beginPath();
         c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
         c.fillStyle = this.color;
         c.fill();
@@ -192,7 +192,7 @@ function render() {
             // console.log('drawing pllayer: '+ others[i].position.x + " " +  others[i].position.y + " " +  others[i].r)
             c.beginPath()
             c.arc(others[i].position.x, others[i].position.y, others[i].r, 0, Math.PI * 2, false);
-            c.fillStyle = 'orange';
+            c.fillStyle = others[i].color;
             c.fill();
 
             // c.beginPath();
@@ -215,7 +215,7 @@ function render() {
 
     c.beginPath()
     c.arc(me.position.x, me.position.y, me.r, 0, Math.PI * 2, false);
-    c.fillStyle = 'red';
+    c.fillStyle = me.color;
     c.fill();
     bullets.forEach((bullet) => {
         c.beginPath()

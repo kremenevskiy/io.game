@@ -2,6 +2,15 @@ const MovableObject = require('./movableobject')
 const Constants = require('../shared/constants')
 const Vector = require('./vector')
 
+function getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = "#";
+    for (var i = 0; i < 6; ++i) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
+
 class Player extends MovableObject {
     constructor(id, username, x, y, r) {
         // console.log('-------------------------');
@@ -18,6 +27,7 @@ class Player extends MovableObject {
         this.r = r;
         this.vel_mid = new Vector(0, 0);
         this.velocity = new Vector(-1, 1);
+        this.color = getRandomColor();
 
     }
 
@@ -42,7 +52,8 @@ class Player extends MovableObject {
         return {
             ...(super.serializeForUpdate()),
             r: this.r,
-            hp: this.hp
+            hp: this.hp,
+            color: this.color
         }
     }
 
