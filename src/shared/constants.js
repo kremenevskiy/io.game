@@ -6,6 +6,7 @@ module.exports = Object.freeze({
     BULLET_RADIUS: 3,
     BULLET_SPEED: 50,
     BULLET_DAMAGE: 10,
+    SCORE_BULLET_HIT: 20,
 
     FOOD_RADIUS: 4,
 
