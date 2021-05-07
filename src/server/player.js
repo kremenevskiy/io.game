@@ -74,6 +74,9 @@ class Player extends MovableObject {
 
     takeBulletDamage(damage=Constants.BULLET_DAMAGE){
         this.hp -= damage;
+        if (this.hp < 0){
+            this.hp = 0;
+        }
     }
 
     causedDamage(scoreHit=Constants.SCORE_BULLET_HIT){

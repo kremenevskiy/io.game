@@ -3,6 +3,7 @@ import {mouseY} from './input'
 import {getCurrentState} from "./state";
 import {socket} from './networking'
 import {eat} from "./index";
+import Constants from "@constants/constants"
 
 function lerp(start, end, t){
     return start*(1-t) + end * t;
@@ -194,6 +195,10 @@ function render() {
             c.arc(others[i].position.x, others[i].position.y, others[i].r, 0, Math.PI * 2, false);
             c.fillStyle = others[i].color;
             c.fill();
+            c.fillStyle = 'white';
+            c.fillRect(others[i].position.x - others[i].r * 0.8, others[i].position.y-2, others[i].r * 2 * 0.8, 4)
+            c.fillStyle = 'red';
+            c.fillRect(others[i].position.x - others[i].r * 0.8, others[i].position.y - 2,others[i].r * 2 * (1 - ((Constants.PLAYER_MAX_HP - others[i].hp) / Constants.PLAYER_MAX_HP)) * 0.8 , 4)
 
             // c.beginPath();
             // c.fillStyle = "white";
@@ -217,6 +222,16 @@ function render() {
     c.arc(me.position.x, me.position.y, me.r, 0, Math.PI * 2, false);
     c.fillStyle = me.color;
     c.fill();
+
+    // draw health bar
+    c.fillStyle = 'white';
+    c.fillRect(me.position.x - me.r * 0.8, me.position.y-2, me.r * 2 * 0.8, 4)
+    c.fillStyle = 'red';
+    c.fillRect(me.position.x - me.r * 0.8, me.position.y - 2,me.r * 2 * (1 - ((Constants.PLAYER_MAX_HP - me.hp) / Constants.PLAYER_MAX_HP)) * 0.8 , 4)
+
+
+
+
     bullets.forEach((bullet) => {
         c.beginPath()
         c.arc(bullet.position.x, bullet.position.y, 8   , 0, Math.PI * 2, false);
@@ -225,6 +240,8 @@ function render() {
     })
 
     c.restore();
+
+
 }
 
 var renderInterval = setInterval(() => {
