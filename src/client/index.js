@@ -3,11 +3,11 @@ import "@css/styles.css"
 import {connect, play} from "./networking";
 import {startCapturingInput, stopCapturingInput} from "./input"
 import {startRendering, stopRendering} from "./render";
+import Constants from "@constants/constants"
 
 
-import {Player} from './render';
 import {Eat} from './render'
-import {animate} from './render';
+
 
 const canvas = document.querySelector('canvas');
 canvas.width = window.innerWidth;
@@ -26,7 +26,8 @@ export var eat = [];
 // var player = new Player(Math.random() * x, Math.random() * y, Math.random() * 30 + 10, 'blue');
 const N = 100;
 for(let i = 0; i < N; ++i){
-    eat[i] = new Eat((Math.round(Math.random()) * 2 - 1) * Math.random() * canvas.width,(Math.round(Math.random()) * 2 - 1) *  Math.random() * canvas.height, 4,
+    eat[i] = new Eat((Math.round(Math.random()) * 2 - 1) * Math.random() * Constants.MAP_SIZE,
+        (Math.round(Math.random()) * 2 - 1) *  Math.random() * Constants.MAP_SIZE, 4,
         `rgb(${rand_col()}, ${rand_col()}, ${rand_col()})`)
 }
 
@@ -51,42 +52,3 @@ function onGameOver() {
     stopCapturingInput();
     stopRendering();
 }
-
-
-
-
-
-// var data = {
-//     x: player.x,
-//     y: player.y,
-//     r: player.radius,
-//     dir: player.dir,
-// };
-
-
-// socket.emit('join_game', data);
-
-//
-// var bullets = [];
-// var players = [];
-// socket.on('game_update',
-//     function(data) {
-//         // console.log("update");
-//         // console.log(data);
-//         player.x = data.me.position.x;
-//         player.y = data.me.position.y;
-//         players = data.others;
-//         bullets = data.bullets;
-//         // console.log('res bullets:' + bullets.length)
-//     }
-// );
-
-
-// startListen(socket, player);
-
-// var projectiles = [];
-
-
-// setInterval( () => {
-//     animate(player, players, bullets, eat, socket);
-// }, 10)
