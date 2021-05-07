@@ -7,6 +7,7 @@ import Constants from "@constants/constants"
 
 
 import {Eat} from './render'
+import {setLeaderboardHidden} from "./leaderboard";
 
 
 const canvas = document.querySelector('canvas');
@@ -19,6 +20,7 @@ export var canvasHeight = canvas.height
 
 const x = canvas.width / 2;
 const y = canvas.height / 2;
+
 const rand_col = () => {
     return Math.random() * 256;
 }
@@ -33,22 +35,31 @@ for(let i = 0; i < N; ++i){
 
 
 const playButton = document.getElementById('play-button');
+const playMenu = document.getElementById('play-menu')
+const usernameInput = document.getElementById('username-input')
+const leaderboard = document.getElementById('leaderboard')
 
-console.log('doing promise')
+// console.log('doing promise')
 Promise.all([connect(onGameOver())]).then(() => {
+        playMenu.classList.remove('hidden')
+        usernameInput.focus();
         playButton.onclick = () => {
+            playMenu.classList.add('hidden')
+
             console.log('clicked button')
-            play("krem");
+            play(usernameInput.value);
             startCapturingInput();
+            setLeaderboardHidden(false)
             setTimeout(() => {
                 startRendering()
-                console.log('now starting rendering')
-            }, 1000);
+            }, 100);
         };
     }).catch(console.error);
 
 
 function onGameOver() {
+
     stopCapturingInput();
     stopRendering();
+    playMenu.classList.remove('hidden')
 }

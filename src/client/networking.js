@@ -5,7 +5,7 @@ const Constants = require('../shared/constants');
 export var socket = io.connect('localhost:3000', {reconnection: false})
 
 
-export const connectedPromise = new Promise(resolve => {
+const connectedPromise = new Promise(resolve => {
     socket.on('connect', () => {
         console.log('Connected to server!');
         resolve();
