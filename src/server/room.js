@@ -7,15 +7,16 @@ class Room {
         this.sockets = {};
         this.players = {};
         this.bullets = [];
-        setInterval(this.update.bind(this), 1000/20);
+        setInterval(this.update.bind(this), 1000/60);
     }
 
     addPlayer(socket, username='krem'){
         this.sockets[socket.id] = socket;
-        const x = Math.floor(Math.random() * Constants.MAP_SIZE);
-        const y = Math.floor(Math.random() * Constants.MAP_SIZE);
-        const r = Math.floor(Math.random() * Constants.PLAYER_RADIUS + 10);
+        const x = Math.floor((Math.random() * 2 - 1) * Constants.MAP_SIZE);
+        const y = Math.floor((Math.random() * 2 - 1) * Constants.MAP_SIZE);
+        const r = Math.floor(Math.random() * Constants.PLAYER_RADIUS + 20);
         this.players[socket.id] = new Player(socket.id, username, x, y, r);
+        console.log('Created player on | X: ' + x + "Y: " + y);
         // console.log('after creation new player:');
         // console.log(this.players[socket.id]);
     }
@@ -45,7 +46,7 @@ class Room {
             const vel_mid_x = update_data.vel_mid.x;
             const vel_mid_y = update_data.vel_mid.y;
 
-            console.log('dir: ' + dir + " x: " + vel_mid_x + "y: " + vel_mid_y)
+            // console.log('dir: ' + dir + " x: " + vel_mid_x + "y: " + vel_mid_y)
 
             this.players[playerID].vel_mid.x = vel_mid_x;
             this.players[playerID].vel_mid.y = vel_mid_y;
