@@ -5,7 +5,7 @@ const rows = document.querySelectorAll('#leaderboard table tr')
 
 export function updateLeaderboard(data) {
     for(let i = 0; i < data.length; i++) {
-        rows[i + 1].innerHTML = `<td>${escape(data[i].username.slice(0, 15)) || 'Anonymous'}</td><td>${
+        rows[i + 1].innerHTML = `<td>${escape(data[i].username.slice(0, 15)) || 'Noname'}</td><td>${
             data[i].score
         }</td>`;
     }

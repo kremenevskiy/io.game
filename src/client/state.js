@@ -1,3 +1,5 @@
+import {updateLeaderboard} from "./leaderboard";
+
 const RENDER_DELAY = 100;
 
 const gameUpdates = [];
@@ -6,6 +8,7 @@ var got_update = false;
 export function processGameUpdate(update) {
     got_update = true;
     lastGameUpdate = update;
+    updateLeaderboard(update.leaderboard)
     // console.log('got new update from server')
     // console.log(update)
 }
