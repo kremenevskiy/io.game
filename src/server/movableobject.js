@@ -12,6 +12,14 @@ class MovableObject extends Object {
         this.pos.y += Math.sin(this.dir) * this.speed;
     }
 
+    constrain(min, max) {
+        const x = this.pos.x
+        const y = this.pos.y
+        this.pos.x = Math.max(Math.min(x, max), min);
+        this.pos.y = Math.max(Math.min(y, max), min);
+        return this.pos
+    }
+
 
     updateDirection(dir) {
         this.dir = dir;
