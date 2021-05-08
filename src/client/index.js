@@ -38,6 +38,7 @@ const playButton = document.getElementById('play-button');
 const playMenu = document.getElementById('play-menu')
 const usernameInput = document.getElementById('username-input')
 const leaderboard = document.getElementById('leaderboard')
+// const canva = document.getElementById('game-canvas')
 
 // console.log('doing promise')
 Promise.all([connect(onGameOver())]).then(() => {
@@ -45,6 +46,7 @@ Promise.all([connect(onGameOver())]).then(() => {
         usernameInput.focus();
         playButton.onclick = () => {
             playMenu.classList.add('hidden')
+            canvas.classList.remove('hidden')
 
             console.log('clicked button')
             play(usernameInput.value);
@@ -61,5 +63,6 @@ function onGameOver() {
 
     stopCapturingInput();
     stopRendering();
-    playMenu.classList.remove('hidden')
+    playMenu.classList.remove('hidden');
+    canvas.classList.add('hidden');
 }

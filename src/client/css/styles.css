@@ -2,7 +2,7 @@ body {
     margin: 0;
     padding: 0;
     overscroll-behavior: none;
-    background-color: white;
+    background-color: black;
     overflow: hidden;
 }
 
@@ -17,11 +17,12 @@ button {
     font-size: 18px;
     border: 2px solid black;
     color: black;
-    background-color: transparent;
+    background-color: pink;
     padding: 5px 20px;
-    border-radius: 6px;
+    border-radius: 10px;
     transition: background-color 0.5s ease;
     cursor: pointer;
+
 }
 button:hover {
     background-color: rgb(100, 100, 100);
@@ -37,7 +38,7 @@ button:focus {
 }
 
 #game-canvas {
-    background-color: cornsilk;
+    background-color: white;
     width: 100%;
     height: 100%;
 }
@@ -47,12 +48,18 @@ button:focus {
     left: 50%;
     transform: translateY(-50%) translateX(-50%);
     padding: 20px 30px;
-    background-color: white;
+    background-color: black;
+    color: white;
     display: flex;
     flex-direction: column;
     align-items: center;
     border-radius: 20px;
     text-align: center;
+}
+
+#play-menu a {
+    color: pink;
+    text-decoration: none;
 }
 
 #play-menu p {
