@@ -11,6 +11,8 @@ const noConnectModal = document.getElementById('no-connect-modal');
 const playMenu = document.getElementById('play-menu');
 const usernameInput = document.getElementById('username-input');
 const leaderboard = document.getElementById('leaderboard');
+const deadMenu = document.getElementById('dead-menu');
+const deadButton = document.getElementById('dead-button');
 
 
 canvas.width = window.innerWidth;
@@ -52,7 +54,13 @@ function playClicked() {
 function onGameOver() {
     stopCapturingInput();
     stopRendering();
-    playMenu.classList.remove('hidden');
-    canvas.classList.add('hidden');
     setLeaderboardHidden(true);
+    canvas.classList.add('hidden');
+    deadMenu.classList.remove('hidden');
+    deadButton.onclick = () => {
+        deadMenu.classList.add('hidden');
+        playMenu.classList.remove('hidden');
+    }
+
+
 }
