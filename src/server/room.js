@@ -187,9 +187,13 @@ class Room {
             .sort((p1, p2) => p2.score - p1.score)
             .slice(0, 4);
         players.push(player);
-        players.sort((p1, p2) => p2.score - p1.score)
+        players.sort((p1, p2) => p2.score - p1.score);
+        const player_pos = players.indexOf(player);
 
-        return players.map(p => ({username: p.username, score:Math.round(p.score)}))
+        return {
+            players: players.map(p => ({username: p.username, score:Math.round(p.score)})),
+            me_position: player_pos
+        }
     }
 
     createUpdate(player, leaderboard){
