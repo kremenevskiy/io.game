@@ -43,6 +43,7 @@ function newConnection(socket){
     socket.on(Constants.MSG_TYPES.JOIN_GAME, joinGame);
     socket.on(Constants.MSG_TYPES.UPDATE_INPUT, updatePlayer);
     socket.on(Constants.MSG_TYPES.NEW_BULLET, addBullet);
+    socket.on(Constants.MSG_TYPES.CANVAS_GET, setCanvasSize)
     socket.on('disconnect', onDisconnect);
 
 }
@@ -77,6 +78,10 @@ function updatePlayer(update_data){
 
 function addBullet(dir){
     room.addBullet(this.id, dir);
+}
+
+function setCanvasSize(canvas_size) {
+    room.updatePlayerCanvas(this.id, canvas_size);
 }
 
 

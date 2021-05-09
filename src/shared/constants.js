@@ -13,6 +13,7 @@ module.exports = Object.freeze({
     MAP_SIZE: 700,
     MSG_TYPES: {
 
+        CANVAS_GET: 'canvas_get',
         UPDATE_INPUT: 'update_input',
         NEW_BULLET: 'new_bullet',
         JOIN_GAME: 'join_game',

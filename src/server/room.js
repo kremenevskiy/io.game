@@ -12,8 +12,6 @@ class Room {
         this.foods = [];
         setInterval(this.update.bind(this), 1000/60);
         setInterval(this.updateFood.bind(this), 1000/5);
-
-
     }
 
 
@@ -54,6 +52,9 @@ class Room {
         // console.log(this.players[socket.id]);
     }
 
+    updatePlayerCanvas(playerId, canvas_size){
+        this.players[playerId].canvas_size = canvas_size;
+    }
 
 
 
@@ -149,6 +150,18 @@ class Room {
         this.bullets = this.bullets.filter(bullet => !destroyedBullets.includes(bullet));
 
 
+        // const all_player = Object.values(this.players);
+        // for (let i = 0; i < all_player.length; ++i) {
+        //     for (let j = 0; j < all_player.length; j++){
+        //         if (all_player[i].eatsPlayer(all_player[j])){
+        //             // delete this.sockets[all_player[j].id];
+        //             // delete this.players[all_player[j].id];
+        //             // this.removePlayer(this.sockets[all_player[j].id])
+        //         }
+        //     }
+        // }
+
+
 
         // console.log('\t\t\t\t\t------------------uuuuuuupdate')
         // console.log(this.players)
@@ -178,6 +191,7 @@ class Room {
             // console.log('*******************************')
 
             socket.emit(Constants.MSG_TYPES.GAME_UPDATE, this.createUpdate(player, leaderboard));
+
         })
     }
 
@@ -204,15 +218,25 @@ class Room {
             bullets: this.bullets.map(b => b.serializeForUpdate())
         };
 
+
+        const visible_dist = player.canvas_size / 2 * Math.sqrt(2) * (30 / player.r);
+
+        const nearbyPlayers = Object.values(this.players)
+            .filter(p => p!==player && p.pos.dist(player.pos) <= visible_dist);
+        const nearbyBullets = this.bullets.filter(b => b.pos.dist(player.pos) <= visible_dist);
+        const nearbyFood = this.foods.filter(f => f.pos.dist(player.pos) <= visible_dist);
+
+        // console.log(nearbyPlayers)
+
         // console.log(this.foods.map(f => f.serializeForUpdate()));
         // console.log(data);
         // console.log('before update:');
         // console.log(player)
         return {
             me: player.serializeForUpdate(),
-            others: Object.values(this.players).map(p => p.serializeForUpdate()),
-            bullets: this.bullets.map(b => b.serializeForUpdate()),
-            food: this.foods.map(f => f.serializeForUpdate()),
+            others: nearbyPlayers.map(p => p.serializeForUpdate()),
+            bullets: nearbyBullets.map(b => b.serializeForUpdate()),
+            food: nearbyFood.map(f => f.serializeForUpdate()),
             leaderboard: leaderboard
         }
     }
