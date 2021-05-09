@@ -10,6 +10,15 @@ class Bullet extends MovableObject {
         this.parentID = parentID;
         this.damage = damage;
     }
+
+
+    serializeForUpdate() {
+        return {
+            ...(super.serializeForUpdate()),
+            r: this.r
+        }
+
+    }
 }
 
 
