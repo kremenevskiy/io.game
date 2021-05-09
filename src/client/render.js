@@ -2,7 +2,6 @@ import {mouseX} from './input'
 import {mouseY} from './input'
 import {getCurrentState} from "./state";
 import {socket} from './networking'
-import {eat} from "./index";
 import Constants from "@constants/constants"
 
 function lerp(start, end, t){
@@ -210,6 +209,13 @@ function render() {
 
     }
 
+
+    // draw boundaries
+    c.fillStyle = 'black';
+    c.lineWidth = 1;
+    c.strokeRect(-Constants.MAP_SIZE, -Constants.MAP_SIZE, Constants.MAP_SIZE*2, Constants.MAP_SIZE*2);
+
+
     food.forEach((foody) => {
         c.beginPath()
         c.arc(foody.position.x, foody.position.y, 4   , 0, Math.PI * 2, false);
@@ -244,9 +250,7 @@ function render() {
 
 }
 
-var renderInterval = setInterval(() => {
-    console.log('first try')
-}, 1000/2)
+let renderInterval = null;
 
 export function startRendering() {
     clearInterval(renderInterval)
@@ -255,7 +259,4 @@ export function startRendering() {
 
 export function stopRendering() {
     clearInterval(renderInterval);
-    renderInterval = setInterval(() => {
-        console.log('not rendering')
-    }, 2000);
 }

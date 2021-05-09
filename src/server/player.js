@@ -44,7 +44,7 @@ class Player extends MovableObject {
         // console.log("\t\t\tvelocity lerp:: x:" + this.velocity.x + " y: " + this.velocity.y);
 
         this.pos.add(this.velocity);
-        this.constrain(-Constants.MAP_SIZE, Constants.MAP_SIZE);
+        this.constrain(-Constants.MAP_SIZE + this.r, Constants.MAP_SIZE - this.r);
         // console.log("to x: " + this.pos.x + "y: " + this.pos.y)
 
     }
@@ -63,7 +63,7 @@ class Player extends MovableObject {
         if (dist < this.r + food.r){
             var square_area = this.r * this.r * Math.PI + food.r * food.r * Math.PI;
             this.r = Math.sqrt(square_area / Math.PI);
-           //  this.radius += other.radius;
+            // this.r += food.r * 5;
             return true;
         }
         else {
