@@ -150,16 +150,31 @@ class Room {
         this.bullets = this.bullets.filter(bullet => !destroyedBullets.includes(bullet));
 
 
-        // const all_player = Object.values(this.players);
-        // for (let i = 0; i < all_player.length; ++i) {
-        //     for (let j = 0; j < all_player.length; j++){
-        //         if (all_player[i].eatsPlayer(all_player[j])){
-        //             // delete this.sockets[all_player[j].id];
-        //             // delete this.players[all_player[j].id];
-        //             // this.removePlayer(this.sockets[all_player[j].id])
-        //         }
-        //     }
-        // }
+
+        // check if can eat other players
+        const all_players = Object.values(this.players);
+        all_players.forEach(player => {
+            all_players.filter(other => other!== player).forEach(other => {
+                player.eatsPlayer(other);
+            })
+        })
+
+
+
+
+        // check if there is dead players
+        Object.keys(this.players).forEach(playerID => {
+            const socket = this.sockets[playerID];
+            const player = this.players[playerID];
+
+            if (player.dead) {
+                let aliveData = {
+                    score: player.score
+                }
+                socket.emit(Constants.MSG_TYPES.GAME_OVER, aliveData);
+                this.removePlayer(socket);
+            }
+        })
 
 
 

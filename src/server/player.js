@@ -29,6 +29,8 @@ class Player extends MovableObject {
         this.velocity = new Vector(-1, 1);
         this.color = getRandomColor();
         this.damage = Constants.BULLET_DAMAGE;
+        this.canvas_size = Constants.MAP_SIZE;
+        this.dead = false;
 
     }
 
@@ -63,7 +65,7 @@ class Player extends MovableObject {
         if (dist < this.r + food.r){
             var square_area = this.r * this.r * Math.PI + food.r * food.r * Math.PI;
             this.r = Math.sqrt(square_area / Math.PI);
-            // this.r += food.r * 5;
+            // this.r += food.r;
             return true;
         }
         else {
@@ -72,11 +74,27 @@ class Player extends MovableObject {
     }
 
 
+    eatsPlayer(otherPlayer) {
+        // const dist = this.pos.dist(player.pos) < this.r;
+        const square_this = Math.PI * this.r * this.r;
+        const square_other = Math.PI * otherPlayer.r * otherPlayer.r;
+
+        if (square_this * 0.9 > square_other && this.pos.dist(otherPlayer.pos) < this.r){
+            const new_square = square_this + square_other;
+            this.r = Math.sqrt(new_square / Math.PI);
+            otherPlayer.dead = true;
+            return true;
+        }
+        return false
+    }
+
     takeBulletDamage(damage=Constants.BULLET_DAMAGE){
         this.hp -= damage;
         if (this.hp < 0){
             this.hp = 0;
+            this.dead = true;
         }
+
     }
 
     causedDamage(scoreHit=Constants.SCORE_BULLET_HIT){
