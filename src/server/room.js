@@ -11,7 +11,7 @@ class Room {
         this.max_food_amount = 100;
         this.foods = [];
         setInterval(this.update.bind(this), 1000/60);
-        setInterval(this.updateFood.bind(this), 1000);
+        setInterval(this.updateFood.bind(this), 1000/5);
 
 
     }
@@ -164,8 +164,9 @@ class Room {
         // console.log('\t\t\t\t\t-----------------------------')
         // console.log(this.players)
         // console.log('making update game to client:')
-        const leaderboard = this.getLeaderboard();
+
         Object.keys(this.sockets).forEach(playerID => {
+            let leaderboard = this.getLeaderboard(this.players[playerID])
             const socket = this.sockets[playerID];
             // console.log('*******************************')
             const player = this.players[playerID];
@@ -180,11 +181,15 @@ class Room {
         })
     }
 
-    getLeaderboard() {
-        return Object.values(this.players)
+    getLeaderboard(player) {
+        let players = Object.values(this.players)
+            .filter(p => p !== player)
             .sort((p1, p2) => p2.score - p1.score)
-            .slice(0, 5)
-            .map(p => ({username: p.username, score:Math.round(p.score)}))
+            .slice(0, 4);
+        players.push(player);
+        players.sort((p1, p2) => p2.score - p1.score)
+
+        return players.map(p => ({username: p.username, score:Math.round(p.score)}))
     }
 
     createUpdate(player, leaderboard){

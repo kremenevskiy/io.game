@@ -32,14 +32,15 @@
         <table>
             <caption>Leaderboard</caption>
             <tr>
+                <th class="leaderboard_info"></th>
                 <th class="leaderboard_info">Username</th>
                 <th class="leaderboard_info">Score</th>
             </tr>
-            <tr><td></td><td></td></tr>
-            <tr><td></td><td></td></tr>
-            <tr><td></td><td></td></tr>
-            <tr><td></td><td></td></tr>
-            <tr><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td></tr>
         </table>
     </div>
     <div id="disconnect-modal" class="hidden">
@@ -49,6 +50,14 @@
             <button id="reconnect-button">RECONNECT</button>
         </div>
     </div>
+    <div id="no-connect-modal" class="hidden">
+        <div>
+            <h2>Unable to connect to server :(</h2>
+            <hr />
+            <button id="no-connect-button">RECONNECT</button>
+        </div>
+    </div>
+
     <canvas id="game-canvas" class="hidden"></canvas>
 </body>
 </html>
