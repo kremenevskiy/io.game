@@ -19,6 +19,12 @@ export function updateLeaderboard(data) {
             players[i].score
         }</td>`;
     }
+    if (players.length < 5) {
+        let cnt_players = players.length;
+        for (let i = cnt_players; i < 5; ++i){
+            rows[i + 1].innerHTML = `<td></td><td></td><td></td>`;
+        }
+    }
     for(let i = data.length; i < 5; ++i){
         rows[i+1].innerHTML = '<td>:</td><td>-</td><td>-</td>'
     }
