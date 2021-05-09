@@ -1,8 +1,11 @@
 import {throttle} from "throttle-debounce";
 import {processGameUpdate} from "./state";
+import {canvasWidth, canvasHeight} from "./index";
+
 const Constants = require('@constants/constants');
 
 export var socket = io.connect(window.location.host, {reconnection: false})
+
 
 
 const connectedPromise = new Promise((resolve, reject) => {
@@ -51,6 +54,9 @@ function onDisconnected() {
 
 export const play = username => {
     socket.emit(Constants.MSG_TYPES.JOIN_GAME, username);
+
+    const canvas_size = canvasWidth > canvasHeight ? canvasWidth : canvasHeight
+    socket.emit(Constants.MSG_TYPES.CANVAS_GET, canvas_size);
 }
 
 export const updateDirection = throttle(100, (update_data) => {

@@ -54,4 +54,5 @@ function onGameOver() {
     stopRendering();
     playMenu.classList.remove('hidden');
     canvas.classList.add('hidden');
+    setLeaderboardHidden(true);
 }
