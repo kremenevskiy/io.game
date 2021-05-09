@@ -6,9 +6,12 @@ import {setLeaderboardHidden} from "./leaderboard";
 
 const canvas = document.querySelector('canvas');
 const playButton = document.getElementById('play-button');
+const noConnectionButton = document.getElementById('no-connect-button');
+const noConnectModal = document.getElementById('no-connect-modal');
 const playMenu = document.getElementById('play-menu');
 const usernameInput = document.getElementById('username-input');
 const leaderboard = document.getElementById('leaderboard');
+
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
@@ -22,7 +25,12 @@ Promise.all([connect(onGameOver)])
         usernameInput.focus();
         playButton.onclick = () => {playClicked()}
     })
-    .catch(() => {})
+    .catch(() => {
+        noConnectModal.classList.remove('hidden')
+        noConnectionButton.onclick = () => {
+            window.location.reload();
+        }
+    })
 
 
 function playClicked() {

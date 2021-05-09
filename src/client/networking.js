@@ -1,11 +1,13 @@
 import {throttle} from "throttle-debounce";
 import {processGameUpdate} from "./state";
 const Constants = require('@constants/constants');
+
 export var socket = io.connect(window.location.host, {reconnection: false})
 
 
 const connectedPromise = new Promise((resolve, reject) => {
     let connected = false;
+    const timeOut = 300;
     socket.on('connect', () => {
         connected = true;
         resolve('Connected to server');
@@ -15,7 +17,7 @@ const connectedPromise = new Promise((resolve, reject) => {
             reject('Couldn\'t connect to server.\n' +
                 'Socket timeout');
         }
-    }, 5000)
+    }, timeOut)
 
 });
 
