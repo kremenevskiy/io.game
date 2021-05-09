@@ -1,26 +1,51 @@
 import {throttle} from "throttle-debounce";
 import {processGameUpdate} from "./state";
+const Constants = require('@constants/constants');
+export var socket = io.connect(window.location.host, {reconnection: false})
 
-const Constants = require('../shared/constants');
-export var socket = io.connect('localhost:3000', {reconnection: false})
 
-
-const connectedPromise = new Promise(resolve => {
+const connectedPromise = new Promise((resolve, reject) => {
+    let connected = false;
     socket.on('connect', () => {
-        console.log('Connected to server!');
-        resolve();
-    });
+        connected = true;
+        resolve('Connected to server');
+    })
+    setTimeout(() => {
+        if (!connected) {
+            reject('Couldn\'t connect to server.\n' +
+                'Socket timeout');
+        }
+    }, 5000)
+
 });
 
 
 export const connect = onGameOver => {
-    connectedPromise.then(() => {
-        socket.on(Constants.MSG_TYPES.GAME_UPDATE, processGameUpdate);
-        socket.on('disconnect', () => {
-            console.log('Disconnected from server')
-        })
+    return new Promise((resolve, reject) => {
+        connectedPromise
+            .then((successMsg) => {
+                console.log(successMsg)
+                socket.on(Constants.MSG_TYPES.GAME_UPDATE, processGameUpdate);
+                socket.on(Constants.MSG_TYPES.GAME_OVER, onGameOver)
+                socket.on('disconnect', onDisconnected);
+                resolve();
+            })
+            .catch((errorMsg) => {
+                console.error(errorMsg)
+                reject();
+            })
     })
 }
+
+
+function onDisconnected() {
+    console.log('Disconnected from server');
+    document.getElementById('disconnect-modal').classList.remove('hidden');
+    document.getElementById('reconnect-button').onclick = () => {
+        window.location.reload();
+    }
+}
+
 
 export const play = username => {
     socket.emit(Constants.MSG_TYPES.JOIN_GAME, username);
