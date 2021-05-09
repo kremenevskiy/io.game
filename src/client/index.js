@@ -6,19 +6,19 @@ import {setLeaderboardHidden} from "./leaderboard";
 
 const canvas = document.querySelector('canvas');
 const playButton = document.getElementById('play-button');
-const playMenu = document.getElementById('play-menu')
-const usernameInput = document.getElementById('username-input')
-const leaderboard = document.getElementById('leaderboard')
+const playMenu = document.getElementById('play-menu');
+const usernameInput = document.getElementById('username-input');
+const leaderboard = document.getElementById('leaderboard');
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 export var canvasWidth = canvas.width;
-export var canvasHeight = canvas.height
+export var canvasHeight = canvas.height;
 
 
 Promise.all([connect(onGameOver)])
     .then(() => {
-        playMenu.classList.remove('hidden')
+        playMenu.classList.remove('hidden');
         usernameInput.focus();
         playButton.onclick = () => {playClicked()}
     })
@@ -26,16 +26,18 @@ Promise.all([connect(onGameOver)])
 
 
 function playClicked() {
-    playMenu.classList.add('hidden')
-    canvas.classList.remove('hidden')
-
-    console.log('clicked button')
+    playMenu.classList.add('hidden');
+    canvas.classList.remove('hidden');
     play(usernameInput.value);
     startCapturingInput();
-    setLeaderboardHidden(false)
+    setLeaderboardHidden(false);
+
+    // start rendering 100 ms later
+    // so bcs waiting first update from server
     setTimeout(() => {
-        startRendering()
+        startRendering();
     }, 100);
+
 }
 
 
