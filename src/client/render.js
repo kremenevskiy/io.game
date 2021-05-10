@@ -23,10 +23,16 @@ function render() {
     c.clearRect(0, 0, canvas.width, canvas.height);
     c.save();
     c.translate(canvas.width/2, canvas.height/2);
-    var newZoom = 30 / me.r;
+    var newZoom = 30  / me.r;
     zoom = lerp(zoom, newZoom, 0.1);
-    c.scale(zoom, zoom);
+    // if (me.r % 10 === 5) {
+    //     console.log('new zoom: ', newZoom)
+    //     console.log('zoom: ', zoom)
+    // }
+    c.scale(zoom + 0.5, zoom + 0.5);
+    // c.scale(me.r+1 / me.r, me.r+1 / me.r)
     c.translate(-me.position.x, -me.position.y);
+
 
 
     // draw boundaries
@@ -52,7 +58,7 @@ function render() {
     c.textAlign = "center";
     c.font = '30px serif';
     let score_msg = "Score: " + me.score.toString();
-    console.log("mess: " + score_msg);
+    // console.log("mess: " + score_msg);
     c.fillText(score_msg, canvasWidth * 0.08, canvasHeight * 0.08);
     c.fill();
 }

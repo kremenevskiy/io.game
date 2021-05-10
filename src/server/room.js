@@ -45,7 +45,7 @@ class Room {
         this.sockets[socket.id] = socket;
         const x = Math.floor((Math.random() * 2 - 1) * Constants.MAP_SIZE);
         const y = Math.floor((Math.random() * 2 - 1) * Constants.MAP_SIZE);
-        const r = Math.floor(Math.random() * Constants.PLAYER_RADIUS + 20);
+        const r = Math.floor(Math.random() * Constants.PLAYER_RADIUS + 10);
         this.players[socket.id] = new Player(socket.id, username, x, y, r);
         console.log('Created player on | X: ' + x + "Y: " + y);
         // console.log('after creation new player:');
