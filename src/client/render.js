@@ -47,8 +47,14 @@ function render() {
 
 
     // Draw score
-    c.s
-    c.fillText(me.score.toString(), canvasWidth * 0.5, canvasHeight * 0.5);
+    c.beginPath();
+    c.fillStyle = "black";
+    c.textAlign = "center";
+    c.font = '30px serif';
+    let score_msg = "Score: " + me.score.toString();
+    console.log("mess: " + score_msg);
+    c.fillText(score_msg, canvasWidth * 0.08, canvasHeight * 0.08);
+    c.fill();
 }
 
 
@@ -66,7 +72,7 @@ function renderPlayer(player) {
     c.fillRect(player.position.x - player.r * 0.8, player.position.y - 2,player.r * 2 * (1 - ((Constants.PLAYER_MAX_HP - player.hp) / Constants.PLAYER_MAX_HP)) * 0.8 , 4);
 
     c.fillStyle = player.color;
-    console.log(player.nickname, player.position.x - player.r - 5, player.position.y - player.r - 5);
+    // console.log(player.nickname, player.position.x - player.r - 5, player.position.y - player.r - 5);
     c.fillText(player.nickname, player.position.x - player.r - 5, player.position.y - player.r - 5);
     // c.strokeText(player.nickname, player.position.x - player.r - 5, player.position.y - player.r - 5);
 }

@@ -117,10 +117,14 @@ class Player extends MovableObject {
         const square_this = Math.PI * this.r * this.r;
         const square_other = Math.PI * otherPlayer.r * otherPlayer.r;
 
-        if (square_this * 0.9 > square_other && this.pos.dist(otherPlayer.pos) < this.r){
+        if (square_this * 0.8 > square_other && this.pos.dist(otherPlayer.pos) < this.r){
             const new_square = square_this + square_other;
             this.r = Math.sqrt(new_square / Math.PI);
             otherPlayer.dead = true;
+
+            // add score
+
+            this.score += otherPlayer.score * 0.8;
             return true;
         }
         return false

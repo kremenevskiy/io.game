@@ -8,7 +8,7 @@ module.exports = Object.freeze({
     BULLET_DAMAGE: 5,
     SCORE_BULLET_HIT: 20,
 
-    SCORE_FOR_FOOD: 4,
+    SCORE_FOR_FOOD: 1,
 
     FOOD_RADIUS: 4,
 
