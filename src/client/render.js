@@ -1,5 +1,6 @@
 import {getCurrentState} from "./state";
 import Constants from "@constants/constants"
+import {canvasHeight, canvasWidth} from "./index";
 
 
 const canvas = document.querySelector('canvas');
@@ -42,6 +43,12 @@ function render() {
     renderPlayer(me);
 
     c.restore();
+
+
+
+    // Draw score
+    c.s
+    c.fillText(me.score.toString(), canvasWidth * 0.5, canvasHeight * 0.5);
 }
 
 

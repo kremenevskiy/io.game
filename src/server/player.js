@@ -69,7 +69,8 @@ class Player extends MovableObject {
             r: this.r,
             hp: this.hp,
             color: this.color,
-            nickname: this.username
+            nickname: this.username,
+            score: this.score
         }
     }
 
@@ -100,6 +101,8 @@ class Player extends MovableObject {
         if (dist < this.r + food.r){
             var square_area = this.r * this.r * Math.PI + food.r * food.r * Math.PI;
             this.r = Math.sqrt(square_area / Math.PI);
+
+            this.score += Constants.SCORE_FOR_FOOD;
             // this.r += food.r;
             return true;
         }
