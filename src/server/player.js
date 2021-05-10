@@ -68,7 +68,8 @@ class Player extends MovableObject {
             ...(super.serializeForUpdate()),
             r: this.r,
             hp: this.hp,
-            color: this.color
+            color: this.color,
+            nickname: this.username
         }
     }
 
@@ -98,7 +99,7 @@ class Player extends MovableObject {
         var dist = this.pos.dist(food.pos);
         if (dist < this.r + food.r){
             var square_area = this.r * this.r * Math.PI + food.r * food.r * Math.PI;
-            this.r = Math.sqrt(square_area / Math.PI);
+            // this.r = Math.sqrt(square_area / Math.PI);
             // this.r += food.r;
             return true;
         }
@@ -120,6 +121,23 @@ class Player extends MovableObject {
             return true;
         }
         return false
+    }
+
+
+    makeShoot(bullet){
+        if (this.r < 10) {
+            return;
+        }
+        if (this.r - bullet.r > 0) {
+            let this_area = Math.PI * this.r * this.r;
+            let bullet_area = Math.PI * bullet.r * bullet.r;
+            console.log('square p : ',this_area);
+            console.log('square bull: ',bullet_area);
+            this_area -= bullet_area;
+            console.log('new sq: ',this_area);
+
+            this.r = Math.sqrt(this_area / Math.PI)
+        }
     }
 
     takeBulletDamage(damage= Constants.BULLET_DAMAGE){

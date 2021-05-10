@@ -59,10 +59,14 @@ class Room {
 
 
     addBullet(bulletID, bullet_dir){
+        const player = this.players[bulletID];
+
         const bullet_x = this.players[bulletID].pos.x;
         const bullet_y = this.players[bulletID].pos.y;
         this.bullets.push(new Bullet(bulletID, bullet_x, bullet_y, bullet_dir));
         // console.log('number of bullets: ' + this.bullets.length)
+        console.log('made bullet by: ', player, ' bullet: ', this.bullets[this.bullets.length-1]);
+        player.makeShoot(this.bullets[this.bullets.length - 1]);
     }
 
 
