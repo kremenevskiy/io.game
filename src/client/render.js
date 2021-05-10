@@ -1,7 +1,7 @@
 import {getCurrentState} from "./state";
 import Constants from "@constants/constants"
 import {canvasHeight, canvasWidth} from "./index";
-import {text} from "express";
+
 
 
 const canvas = document.querySelector('canvas');
@@ -67,6 +67,7 @@ function render() {
 }
 
 var strokeColor = getRandomColor();
+
 function renderPlayer(player) {
     // const {position, r, h, color } = player;
     c.beginPath();
@@ -82,6 +83,7 @@ function renderPlayer(player) {
     c.stroke();
 
     // draw health bar
+    c.beginPath();
     c.fillStyle = 'white';
     c.fillRect(player.position.x - player.r * 0.8, player.position.y - 2, player.r * 2 * 0.8, 4);
     c.fillStyle = 'red';
@@ -91,32 +93,22 @@ function renderPlayer(player) {
     c.textAlign = 'center';
 
 
+
+    // draw nickname
     c.beginPath();
-    var font_size = Math.floor((player.r / 2.7)).toString() + 'px';
-    var font = " Comic Sans MS";
+    let font_size = Math.floor((player.r / 2.7)).toString() + 'px';
+    let font = " Comic Sans MS";
 
+    c.font = player.r > 35 ? font_size + font : "15px Comic Sans MS";
+    let text_offset = player.r < 30 ? 5 : 10;
 
-    console.log(c.font);
-    // c.strokeStyle = 'black';
-    if (player.r < 35){
-        c.font = "15px Comic Sans MS";
-    }
-    else {
-        c.font = font_size + font;
-    }
-
-    // c.strokeStyle = strokeColor;
-
-    // var text_offset = null;
-    // if (player.r < 30){
-    //      text_offset = 5;
-    // }
-    // else{
-    //     text_offset = 10;
-    // }
-    c.strokeText(player.nickname, player.position.x, player.position.y - 5);
+    c.strokeStyle = strokeColor;
+    c.lineWidth = 4;
+    c.strokeText(player.nickname, player.position.x, player.position.y - text_offset);
     c.fillStyle = 'white';
-    c.fillText(player.nickname, player.position.x, player.position.y - 5);
+    c.fillText(player.nickname, player.position.x, player.position.y - text_offset);
+
+
 }
 
 
