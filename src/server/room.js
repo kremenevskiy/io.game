@@ -41,7 +41,7 @@ class Room {
     }
 
 
-    addPlayer(socket, username='krem'){
+    addPlayer(socket, username){
         this.sockets[socket.id] = socket;
         const x = Math.floor((Math.random() * 2 - 1) * Constants.MAP_SIZE);
         const y = Math.floor((Math.random() * 2 - 1) * Constants.MAP_SIZE);
@@ -65,7 +65,7 @@ class Room {
         const bullet_y = this.players[bulletID].pos.y;
         this.bullets.push(new Bullet(bulletID, bullet_x, bullet_y, bullet_dir));
         // console.log('number of bullets: ' + this.bullets.length)
-        console.log('made bullet by: ', player, ' bullet: ', this.bullets[this.bullets.length-1]);
+        // console.log('made bullet by: ', player, ' bullet: ', this.bullets[this.bullets.length-1]);
         player.makeShoot(this.bullets[this.bullets.length - 1]);
     }
 
@@ -237,8 +237,9 @@ class Room {
             bullets: this.bullets.map(b => b.serializeForUpdate())
         };
 
-
+        // const visible_dist = Constants.MAP_SIZE * 4;
         const visible_dist = player.canvas_size / 2 * Math.sqrt(2) * (30 / player.r);
+
 
         const nearbyPlayers = Object.values(this.players)
             .filter(p => p!==player && p.pos.dist(player.pos) <= visible_dist);

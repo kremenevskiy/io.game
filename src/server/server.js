@@ -53,8 +53,11 @@ function newConnection(socket){
 
 const room = new Room();
 room.setup();
-function joinGame(username='krem'){
-    console.log('joining game: ' + this.id);
+function joinGame(username){
+    if (username === ""){
+        username = "NoName";
+    }
+    console.log('New player joined the game: \nName: ' +  username + "Socket id: " + this.id);
     room.addPlayer(this, username);
 }
 

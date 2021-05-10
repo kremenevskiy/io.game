@@ -10,12 +10,13 @@ canvas.height = window.innerHeight;
 
 var zoom = 1;
 function render() {
-    // console.log('try rendering')
+    // console.log('start rendering')
 
     if (!getCurrentState()){
-        console.log('no update yet for render')
+        // console.log('no update yet for render');
         return;
     }
+
     const {me, others, bullets, food} = getCurrentState();
 
     c.clearRect(0, 0, canvas.width, canvas.height);
@@ -53,9 +54,14 @@ function renderPlayer(player) {
 
     // draw health bar
     c.fillStyle = 'white';
-    c.fillRect(player.position.x - player.r * 0.8, player.position.y - 2, player.r * 2 * 0.8, 4)
+    c.fillRect(player.position.x - player.r * 0.8, player.position.y - 2, player.r * 2 * 0.8, 4);
     c.fillStyle = 'red';
-    c.fillRect(player.position.x - player.r * 0.8, player.position.y - 2,player.r * 2 * (1 - ((Constants.PLAYER_MAX_HP - player.hp) / Constants.PLAYER_MAX_HP)) * 0.8 , 4)
+    c.fillRect(player.position.x - player.r * 0.8, player.position.y - 2,player.r * 2 * (1 - ((Constants.PLAYER_MAX_HP - player.hp) / Constants.PLAYER_MAX_HP)) * 0.8 , 4);
+
+    c.fillStyle = player.color;
+    console.log(player.nickname, player.position.x - player.r - 5, player.position.y - player.r - 5);
+    c.fillText(player.nickname, player.position.x - player.r - 5, player.position.y - player.r - 5);
+    // c.strokeText(player.nickname, player.position.x - player.r - 5, player.position.y - player.r - 5);
 }
 
 
