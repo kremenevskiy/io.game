@@ -1,6 +1,7 @@
 import {getCurrentState} from "./state";
 import Constants from "@constants/constants"
 import {canvasHeight, canvasWidth} from "./index";
+import {text} from "express";
 
 
 const canvas = document.querySelector('canvas');
@@ -10,6 +11,8 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 var zoom = 1;
+
+
 function render() {
     // console.log('start rendering')
 
@@ -63,13 +66,20 @@ function render() {
     c.fill();
 }
 
-
+var strokeColor = getRandomColor();
 function renderPlayer(player) {
     // const {position, r, h, color } = player;
     c.beginPath();
     c.arc(player.position.x, player.position.y, player.r, 0, Math.PI * 2, false);
     c.fillStyle = player.color;
     c.fill();
+    if (player.r < 30){
+        c.lineWidth = 4;
+    } else{
+        c.lineWidth = player.r / 10;
+    }
+    c.strokeStyle = strokeColor;
+    c.stroke();
 
     // draw health bar
     c.fillStyle = 'white';
@@ -78,9 +88,35 @@ function renderPlayer(player) {
     c.fillRect(player.position.x - player.r * 0.8, player.position.y - 2,player.r * 2 * (1 - ((Constants.PLAYER_MAX_HP - player.hp) / Constants.PLAYER_MAX_HP)) * 0.8 , 4);
 
     c.fillStyle = player.color;
-    // console.log(player.nickname, player.position.x - player.r - 5, player.position.y - player.r - 5);
-    c.fillText(player.nickname, player.position.x - player.r - 5, player.position.y - player.r - 5);
-    // c.strokeText(player.nickname, player.position.x - player.r - 5, player.position.y - player.r - 5);
+    c.textAlign = 'center';
+
+
+    c.beginPath();
+    var font_size = Math.floor((player.r / 2.7)).toString() + 'px';
+    var font = " Comic Sans MS";
+
+
+    console.log(c.font);
+    // c.strokeStyle = 'black';
+    if (player.r < 35){
+        c.font = "15px Comic Sans MS";
+    }
+    else {
+        c.font = font_size + font;
+    }
+
+    // c.strokeStyle = strokeColor;
+
+    // var text_offset = null;
+    // if (player.r < 30){
+    //      text_offset = 5;
+    // }
+    // else{
+    //     text_offset = 10;
+    // }
+    c.strokeText(player.nickname, player.position.x, player.position.y - 5);
+    c.fillStyle = 'white';
+    c.fillText(player.nickname, player.position.x, player.position.y - 5);
 }
 
 
@@ -114,4 +150,13 @@ export function stopRendering() {
 // interpolation function to smoothly difference
 function lerp(start, end, t){
     return start * (1-t) + end * t;
+}
+
+function getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = "#";
+    for (var i = 0; i < 6; ++i) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
 }

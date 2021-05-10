@@ -61,7 +61,7 @@ function joinGame(username){
     room.addPlayer(this, username);
 }
 
-var cnt = 0;
+// var cnt = 0;
 function updatePlayer(update_data){
     // console.log('got new move from player!')
     // console.log(update_data)
