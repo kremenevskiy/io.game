@@ -1,11 +1,11 @@
 module.exports = Object.freeze({
     PLAYER_MAX_HP: 100,
     PLAYER_RADIUS: 20,
-    PLAYERS_SPEED: 100,
+    PLAYERS_SPEED: 40,
 
-    BULLET_RADIUS: 3,
-    BULLET_SPEED: 50,
-    BULLET_DAMAGE: 10,
+    BULLET_RADIUS: 6,
+    BULLET_SPEED: 30,
+    BULLET_DAMAGE: 5,
     SCORE_BULLET_HIT: 20,
 
     FOOD_RADIUS: 4,
