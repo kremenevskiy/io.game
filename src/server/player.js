@@ -32,12 +32,18 @@ class Player extends MovableObject {
         this.canvas_size = Constants.MAP_SIZE;
         this.dead = false;
 
-        this.health_timeout_time = null;
-        this.health_regen_time = 7000;
-        this.regen_amount_hp = 5;
+
+
+        // Regen
         this.start_regen = false;
 
-        this.regInt = setInterval(this.regenHealth.bind(this), 400);
+        this.health_regen_time = 100;
+        this.timeout_regen_time = 5000;
+        this.regen_amount_hp = 1;
+
+        this.regInt = null;
+        this.regTime = null;
+
     }
 
     update(){
@@ -67,26 +73,33 @@ class Player extends MovableObject {
     }
 
     regenHealth(){
-        if (this.start_regen) {
-            if (this.hp < Constants.PLAYER_MAX_HP) {
-                if (this.hp + this.regen_amount_hp > Constants.PLAYER_MAX_HP) {
-                    this.hp = Constants.PLAYER_MAX_HP;
-                } else {
-                    this.hp += 1;
+
+        this.regInt = setInterval(() => {
+            if (this.start_regen) {
+                if (this.hp >= 100){
+                    this.start_regen = false;
                 }
-            }
-        } else {
+                if (this.hp < Constants.PLAYER_MAX_HP) {
+                    if (this.hp + this.regen_amount_hp > Constants.PLAYER_MAX_HP) {
+                        this.hp = Constants.PLAYER_MAX_HP;
+                    } else {
+                        this.hp += this.regen_amount_hp;
+                    }
+                }
+            } else {
                 this.start_regen = false;
                 clearInterval(this.regInt);
-        }
+            }
+        }, this.health_regen_time);
     }
+
 
     eatsFood(food){
         var dist = this.pos.dist(food.pos);
         if (dist < this.r + food.r){
             var square_area = this.r * this.r * Math.PI + food.r * food.r * Math.PI;
-            // this.r = Math.sqrt(square_area / Math.PI);
-            this.r += food.r;
+            this.r = Math.sqrt(square_area / Math.PI);
+            // this.r += food.r;
             return true;
         }
         else {
@@ -116,14 +129,15 @@ class Player extends MovableObject {
             this.dead = true;
         }
         this.start_regen = false;
-        this.regInt = setInterval(this.regenHealth.bind(this), this.health_regen_time);
-        this.health_regen_time = setTimeout(() => {
+
+        clearInterval(this.regInt);
+        clearInterval(this.regTime);
+        this.start_regen = false;
+        this.regTime = setTimeout(() => {
             this.start_regen = true;
-        }, 3000);
+            this.regenHealth.apply(this);
 
-
-
-
+        }, this.timeout_regen_time);
     }
 
     causedDamage(scoreHit=Constants.SCORE_BULLET_HIT){
