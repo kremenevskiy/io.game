@@ -14,6 +14,7 @@ class Object {
     }
 
 
+
     serializeForUpdate(){
         // console.log("Coordinates: X: " + this.pos + "Y: " + this.pos);
         // console.log(this.pos);

@@ -1,7 +1,9 @@
 module.exports = Object.freeze({
     PLAYER_MAX_HP: 100,
     PLAYER_RADIUS: 12,
-    PLAYERS_SPEED: 40,
+    PLAYERS_SPEED: 1,
+    PLAYER_MAX_REGEN_TIME: 5000,
+    PLAYER_MIN_REGEN_TIME: 1000,
 
 
     BULLET_MIN_RANGE_SHOOT: 300,

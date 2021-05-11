@@ -82,7 +82,7 @@ function renderPlayer(player) {
     c.fillStyle = 'white';
     c.fillRect(player.position.x - player.r * 0.8, player.position.y - 2, player.r * 2 * 0.8, 4);
     c.fillStyle = 'red';
-    c.fillRect(player.position.x - player.r * 0.8, player.position.y - 2,player.r * 2 * (1 - ((Constants.PLAYER_MAX_HP - player.hp) / Constants.PLAYER_MAX_HP)) * 0.8 , 4);
+    c.fillRect(player.position.x - player.r * 0.8, player.position.y - 2,player.r * 2 * (1 - ((player.hp_max - player.hp) / player.hp_max)) * 0.8 , 4);
 
     c.fillStyle = player.color;
     c.textAlign = 'center';

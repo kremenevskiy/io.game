@@ -8,16 +8,16 @@ class Room {
         this.sockets = {};
         this.players = {};
         this.bullets = [];
-        this.max_food_amount = 100;
+        this.max_food_amount = Constants.MAP_SIZE / 3;
         this.foods = [];
         setInterval(this.update.bind(this), 1000/60);
-        setInterval(this.updateFood.bind(this), 1000/5);
+        setInterval(this.updateFood.bind(this), 1000/100);
     }
 
 
     setup(){
         // adding start food
-        const start_food_amount = 20;
+        const start_food_amount = 200;
         for(let i = 0; i < start_food_amount; ++i) {
             this.foods.push(this.generateOneFood());
         }
@@ -60,12 +60,15 @@ class Room {
 
     addBullet(bulletID, bullet_dir){
         const player = this.players[bulletID];
+        if (!player){
+            return;
+        }
         if(player.canShoot()) {
 
             const bullet_x = this.players[bulletID].pos.x;
             const bullet_y = this.players[bulletID].pos.y;
-            this.bullets.push(new Bullet(bulletID, bullet_x, bullet_y, bullet_dir, Constants.BULLET_SPEED,
-                Constants.BULLET_DAMAGE, Constants.BULLET_RADIUS,  player.r, Constants.BULLET_MIN_RANGE_SHOOT));
+            this.bullets.push(new Bullet(bulletID, bullet_x, bullet_y, bullet_dir, player.bullet_speed,
+                player.damage, player.bullet_radius,  player.r, player.shoot_range));
             // console.log('number of bullets: ' + this.bullets.length)
             // console.log('made bullet by: ', player, ' bullet: ', this.bullets[this.bullets.length-1]);
             player.makeShoot(this.bullets[this.bullets.length - 1]);
