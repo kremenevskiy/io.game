@@ -237,8 +237,13 @@ class Room {
             bullets: this.bullets.map(b => b.serializeForUpdate())
         };
 
+
+        let newZoom = 30 / player.r;
+        player.zoom = lerp(player.zoom, newZoom, 0.1);
+
+
         // const visible_dist = Constants.MAP_SIZE * 4;
-        const visible_dist = player.canvas_size / 2 * Math.sqrt(2) * (30 / player.r);
+        const visible_dist = player.canvas_size / 2 * Math.sqrt(2) * (player.zoom + 0.5);
 
 
         const nearbyPlayers = Object.values(this.players)
@@ -246,12 +251,7 @@ class Room {
         const nearbyBullets = this.bullets.filter(b => b.pos.dist(player.pos) <= visible_dist);
         const nearbyFood = this.foods.filter(f => f.pos.dist(player.pos) <= visible_dist);
 
-        // console.log(nearbyPlayers)
-
-        // console.log(this.foods.map(f => f.serializeForUpdate()));
-        // console.log(data);
-        // console.log('before update:');
-        // console.log(player)
+        
         return {
             me: player.serializeForUpdate(),
             others: nearbyPlayers.map(p => p.serializeForUpdate()),
@@ -260,6 +260,11 @@ class Room {
             leaderboard: leaderboard
         }
     }
+}
+
+
+function lerp(start, end, t){
+    return start * (1-t) + end * t;
 }
 
 

@@ -32,6 +32,9 @@ class Player extends MovableObject {
         this.canvas_size = Constants.MAP_SIZE;
         this.dead = false;
 
+        // for scaling
+        this.zoom = 1;
+
 
 
         // Regen
