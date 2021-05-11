@@ -14,6 +14,8 @@ const leaderboard = document.getElementById('leaderboard');
 const deadMenu = document.getElementById('dead-menu');
 const deadButton = document.getElementById('dead-button');
 
+const upgradeMenu = document.getElementById('upgrade-menu');
+
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
@@ -38,6 +40,7 @@ Promise.all([connect(onGameOver)])
 function playClicked() {
     playMenu.classList.add('hidden');
     canvas.classList.remove('hidden');
+    upgradeMenu.classList.remove('hidden');
     play(usernameInput.value);
     startCapturingInput();
     setLeaderboardHidden(false);
@@ -56,6 +59,7 @@ function onGameOver() {
     stopRendering();
     setLeaderboardHidden(true);
     canvas.classList.add('hidden');
+    upgradeMenu.classList.add('hidden');
     deadMenu.classList.remove('hidden');
     deadButton.onclick = () => {
         deadMenu.classList.add('hidden');
