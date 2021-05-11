@@ -7,6 +7,8 @@ const canvas = document.querySelector('canvas')
 export var mouseX = 0;
 export var mouseY = 0;
 
+var mouseUp = true;
+
 
 function onMouseMove(event) {
     mouseX = event.clientX;
@@ -14,9 +16,22 @@ function onMouseMove(event) {
     handleMove(mouseX, mouseY);
 }
 
-function onClicked(event) {
-    const dir = Math.atan2(event.clientY - canvasHeight / 2, event.clientX - canvasWidth / 2);
-    createBullet(dir)
+function onMouseDown(event) {
+    mouseUp = false;
+
+    var shoot_int = setInterval(() => {
+        const dir = Math.atan2(mouseY - canvasHeight / 2, mouseX - canvasWidth / 2);
+        createBullet(dir)
+        if (mouseUp) {
+            clearInterval(shoot_int);
+        }
+    }, 100)
+
+}
+
+
+function onMouseUp(event) {
+    mouseUp = true;
 }
 
 
@@ -37,7 +52,8 @@ function handleMove(x, y) {
 
 export function startCapturingInput() {
     window.addEventListener('mousemove', onMouseMove);
-    window.addEventListener('click', onClicked)
+    window.addEventListener('mouseup', onMouseUp);
+    window.addEventListener('mousedown', onMouseDown)
 }
 
 
