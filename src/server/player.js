@@ -32,6 +32,15 @@ class Player extends MovableObject {
         this.canvas_size = Constants.MAP_SIZE;
         this.dead = false;
 
+
+
+        // shooting
+        this.shooting_reload_tine = 200;
+        this.can_shoot = true;
+
+
+
+
         // for scaling
         this.zoom = 1;
 
@@ -48,6 +57,22 @@ class Player extends MovableObject {
         this.regTime = null;
 
     }
+
+
+    canShoot(){
+        if (this.can_shoot){
+            this.can_shoot = false;
+            setTimeout(() => {
+               this.can_shoot = true;
+            }, this.shooting_reload_tine);
+
+            return true;
+        }
+        return false;
+    }
+
+
+
 
     update(){
         // console.log("updating player from: x: " + this.pos.x + "y: " + this.pos.y)
