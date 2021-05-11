@@ -43,9 +43,18 @@ function newConnection(socket){
     socket.on(Constants.MSG_TYPES.JOIN_GAME, joinGame);
     socket.on(Constants.MSG_TYPES.UPDATE_INPUT, updatePlayer);
     socket.on(Constants.MSG_TYPES.NEW_BULLET, addBullet);
-    socket.on(Constants.MSG_TYPES.CANVAS_GET, setCanvasSize)
-    socket.on('disconnect', onDisconnect);
+    socket.on(Constants.MSG_TYPES.CANVAS_GET, setCanvasSize);
 
+    // update players
+    socket.on(Constants.MSG_TYPES.DAMAGE_ADD, damage_add);
+    socket.on(Constants.MSG_TYPES.DAMAGE_DEC, damage_dec);
+    socket.on(Constants.MSG_TYPES.HEALTH_ADD, health_add);
+    socket.on(Constants.MSG_TYPES.REGEN_ADD, regen_add);
+    socket.on(Constants.MSG_TYPES.SPEED_ADD, speed_add);
+    socket.on(Constants.MSG_TYPES.RELOAD_ADD, reload_add);
+    socket.on(Constants.MSG_TYPES.RANGE_ADD, range_add);
+
+    socket.on('disconnect', onDisconnect);
 }
 
 
@@ -91,4 +100,34 @@ function setCanvasSize(canvas_size) {
 function onDisconnect(){
     console.log("Player: " + this.id + " disconnected!");
     room.removePlayer(this);
+}
+
+
+function damage_add(damageData) {
+    console.log(damageData);
+}
+
+function damage_dec(damageData) {
+
+}
+
+function health_add(healthData) {
+
+}
+
+function speed_add(speedData) {
+
+}
+
+function regen_add(regenData) {
+
+}
+
+
+function reload_add(reloadData) {
+
+}
+
+function range_add(rangeData) {
+
 }

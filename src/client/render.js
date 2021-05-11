@@ -28,15 +28,10 @@ function render() {
     c.translate(canvas.width/2, canvas.height/2);
     var newZoom = 30  / me.r;
     zoom = lerp(zoom, newZoom, 0.1);
-    // if (me.r % 10 === 5) {
-    //     console.log('new zoom: ', newZoom)
-    //     console.log('zoom: ', zoom)
-    // }
+
+
     c.scale(zoom + 0.5, zoom + 0.5);
-    // c.scale(me.r+1 / me.r, me.r+1 / me.r)
     c.translate(-me.position.x, -me.position.y);
-
-
 
     // draw boundaries
     c.fillStyle = 'black';

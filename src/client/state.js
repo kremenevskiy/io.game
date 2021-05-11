@@ -1,4 +1,4 @@
-import {updateLeaderboard} from "./leaderboard";
+    import {updateLeaderboard} from "./leaderboard";
 
 const RENDER_DELAY = 100;
 

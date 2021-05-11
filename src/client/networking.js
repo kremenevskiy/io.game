@@ -65,7 +65,37 @@ export const updateDirection = throttle(100, (update_data) => {
     socket.emit(Constants.MSG_TYPES.UPDATE_INPUT, update_data);
 })
 
-export const createBullet = dir => {
+export const createBullet = throttle(100, (dir) => {
     socket.emit(Constants.MSG_TYPES.NEW_BULLET, dir);
+})
+
+
+// Update players
+
+export const addDamage = (damageData) => {
+    socket.emit(Constants.MSG_TYPES.DAMAGE_ADD, damageData);
 }
 
+export const decDamage = (damageData) => {
+    socket.emit(Constants.MSG_TYPES.DAMAGE_DEC, damageData);
+}
+
+export const addReload = (reloadData) => {
+    socket.emit(Constants.MSG_TYPES.RELOAD_ADD, reloadData);
+}
+
+export const addHealth = (healthData) => {
+    socket.emit(Constants.MSG_TYPES.HEALTH_ADD, healthData);
+}
+
+export const addRange = (rangeData) => {
+    socket.emit(Constants.MSG_TYPES.RANGE_ADD, rangeData);
+}
+
+export const addRegen = (regenData) => {
+    socket.emit(Constants.MSG_TYPES.REGEN_ADD, regenData);
+}
+
+export const addSpeed = (speedData) => {
+    socket.emit(Constants.MSG_TYPES.SPEED_ADD, speedData);
+}
