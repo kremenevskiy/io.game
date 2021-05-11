@@ -104,30 +104,30 @@ function onDisconnect(){
 
 
 function damage_add(damageData) {
-    console.log(damageData);
+    room.upgradePlayer(this.id, damageData);
 }
 
 function damage_dec(damageData) {
-
+    room.upgradePlayer(this.id, damageData);
 }
 
 function health_add(healthData) {
-
+    room.upgradePlayer(this.id, healthData);
 }
 
 function speed_add(speedData) {
-
+    room.upgradePlayer(this.id, speedData);
 }
 
 function regen_add(regenData) {
-
+    room.upgradePlayer(this.id, regenData);
 }
 
 
 function reload_add(reloadData) {
-
+    room.upgradePlayer(this.id, reloadData);
 }
 
 function range_add(rangeData) {
-
+    room.upgradePlayer(this.id, rangeData);
 }

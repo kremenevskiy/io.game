@@ -196,6 +196,36 @@ class Player extends MovableObject {
     causedDamage(scoreHit=Constants.SCORE_BULLET_HIT){
         this.score += scoreHit;
     }
+
+
+    addDamage(){
+
+    }
+
+    decDamage(){
+
+    }
+
+    addHealth(){
+
+    }
+
+    addReload(){
+
+    }
+
+    addRange(){
+
+    }
+
+    addRegen(){
+
+    }
+
+    addSpeed(){
+
+    }
+
 }
 
 module.exports = Player;

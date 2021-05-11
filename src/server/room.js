@@ -271,6 +271,31 @@ class Room {
             leaderboard: leaderboard
         }
     }
+
+    upgradePlayer(playerID, skill_data){
+        if (skill_data === 'damage_add'){
+            this.players[playerID].addDamage();
+        }
+        else if(skill_data === 'damage_decrease'){
+            this.players[playerID].decDamage();
+        }
+        else if(skill_data === 'reload'){
+            this.players[playerID].addReload();
+        }
+        else if(skill_data === 'range'){
+            this.players[playerID].addRange();
+        }
+        else if(skill_data === 'health'){
+            this.players[playerID].addHealth();
+        }
+        else if(skill_data === 'speed'){
+            this.players[playerID].addSpeed();
+        }
+        else if(skill_data === 'regen'){
+            this.players[playerID].addRegen();
+        }
+
+    }
 }
 
 

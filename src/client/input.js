@@ -71,11 +71,11 @@ function handleMove(x, y) {
 // listen for upgrade
 
 function onDamageAdd(){
-    addDamage('damage add');
+    addDamage('damage_add');
 }
 
 function onDamageDec(){
-    decDamage('damage decrease');
+    decDamage('damage_decrease');
 }
 
 function onReloadAdd(){
