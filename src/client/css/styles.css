@@ -80,6 +80,12 @@ button:focus {
 }
 
 
+.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+
 #play-menu input:hover {
     background-color: rgb(240, 240, 240);
     outline: none;
