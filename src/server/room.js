@@ -11,7 +11,10 @@ class Room {
         this.max_food_amount = Constants.MAP_SIZE / 3;
         this.foods = [];
         setInterval(this.update.bind(this), 1000/60);
-        setInterval(this.updateFood.bind(this), 1000/100);
+        setInterval(this.updateFood.bind(this), 1000/5);
+
+
+        this.players_max_lvl = 20;
     }
 
 
@@ -63,6 +66,11 @@ class Room {
         if (!player){
             return;
         }
+        if (!player.checkShootIsPossible()){
+
+            return;
+        }
+
         if(player.canShoot()) {
 
             const bullet_x = this.players[bulletID].pos.x;
@@ -276,6 +284,26 @@ class Room {
     }
 
     upgradePlayer(playerID, skill_data){
+
+
+        if (!this.players[playerID]){
+            return;
+        }
+
+        if (!(this.players[playerID].player_lvl < this.players_max_lvl)){
+            return;
+        }
+
+        let points_cost = 1;
+        if (skill_data === 'damage_add' || skill_data === 'damage_decrease'){
+            points_cost = 0;
+        }
+
+
+        if (!this.players[playerID].try_to_update(points_cost)){
+            return false;
+        }
+
         if (skill_data === 'damage_add'){
             this.players[playerID].addDamage();
         }
