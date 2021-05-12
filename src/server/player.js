@@ -36,6 +36,11 @@ class Player extends MovableObject {
         this.dead = false;
 
 
+        this.player_lvl = 1;
+        this.progress_to_next_lvl = 0;
+        this.points_to_upgrade = 0;
+
+
         this.damage_lvl = 1;
         this.speed_lvl = 1;
         this.hp_lvl = 1;
@@ -89,6 +94,21 @@ class Player extends MovableObject {
         return false;
     }
 
+    checkShootIsPossible(){
+
+        let this_square = Math.PI * this.r * this.r;
+        let bullet_square = Math.PI * this.bullet_radius * this.bullet_radius;
+
+
+        // console.log('player r: ', this.r)
+        // console.log('bullet r: ', this.bullet_radius)
+        // console.log('player square: ', this_square)
+        // console.log('bullet square: ', bullet_square)
+
+        return (this_square - bullet_square) > this_square * 0.5;
+
+    }
+
 
 
 
@@ -119,7 +139,11 @@ class Player extends MovableObject {
             color: this.color,
             nickname: this.username,
             score: this.score,
+            score_to_next_lvl: this.progress_to_next_lvl,
+            lvl: this.player_lvl,
+            update_points: this.points_to_upgrade,
             bullet_r: this.bullet_radius
+
         }
     }
 
@@ -151,7 +175,7 @@ class Player extends MovableObject {
             var square_area = this.r * this.r * Math.PI + food.r * food.r * Math.PI;
             this.r = Math.sqrt(square_area / Math.PI);
 
-            this.score += Constants.SCORE_FOR_FOOD;
+            this.addScore(Constants.SCORE_FOR_FOOD);
             // this.r += food.r;
             return true;
         }
@@ -173,20 +197,20 @@ class Player extends MovableObject {
 
             // add score
 
-            this.score += otherPlayer.score * 0.8;
+            this.addScore(otherPlayer.score * 0.8);
             return true;
         }
         return false
     }
 
 
-    makeShoot(bullet){
+    makeShoot(){
         if (this.r < 10) {
             return;
         }
-        if (this.r - bullet.r > 0) {
+        if (this.r - this.bullet_radius > 2) {
             let this_area = Math.PI * this.r * this.r;
-            let bullet_area = Math.PI * bullet.r * bullet.r;
+            let bullet_area = Math.PI * this.bullet_radius * this.bullet_radius;
             // console.log('square p : ',this_area);
             // console.log('square bull: ',bullet_area);
             this_area -= bullet_area;
@@ -216,6 +240,33 @@ class Player extends MovableObject {
 
     causedDamage(scoreHit=Constants.SCORE_BULLET_HIT){
         this.score += scoreHit;
+    }
+
+
+    try_to_update(cost){
+        if (this.points_to_upgrade - cost >= 0){
+            this.points_to_upgrade -= cost;
+            return true;
+        }
+        return false;
+    }
+
+
+    upgrade_level(){
+        this.player_lvl ++;
+        this.progress_to_next_lvl = 0;
+        this.points_to_upgrade ++;
+    }
+
+
+    addScore(score){
+        this.score += score;
+        this.progress_to_next_lvl += score;
+
+        if (this.progress_to_next_lvl > Math.pow(this.player_lvl, 2)){
+            this.upgrade_level();
+        }
+
     }
 
 
