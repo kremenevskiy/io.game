@@ -1,4 +1,5 @@
 import {updateLeaderboard} from "./leaderboard";
+import {update_lvl_labels} from "./upgrade";
 
 const upgradeMenu = document.getElementById('upgrade-menu');
 
@@ -21,6 +22,11 @@ export function processGameUpdate(update) {
     }
     // console.log('got new update from server')
     // console.log(update)
+}
+
+
+export function updateLabels(labels_data){
+    update_lvl_labels(labels_data);
 }
 
 

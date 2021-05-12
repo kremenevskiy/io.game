@@ -27,6 +27,7 @@ module.exports = Object.freeze({
         RANGE_ADD: 'range_add',
         RELOAD_ADD: 'reload_add',
         REGEN_ADD: 'regen_add',
+        UPDATE_LABELS: 'labels_update',
 
         CANVAS_GET: 'canvas_get',
         UPDATE_INPUT: 'update_input',

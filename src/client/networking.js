@@ -1,5 +1,5 @@
 import {throttle} from "throttle-debounce";
-import {processGameUpdate} from "./state";
+import {processGameUpdate, updateLabels} from "./state";
 import {canvasWidth, canvasHeight} from "./index";
 
 const Constants = require('@constants/constants');
@@ -31,6 +31,7 @@ export const connect = onGameOver => {
             .then((successMsg) => {
                 console.log(successMsg)
                 socket.on(Constants.MSG_TYPES.GAME_UPDATE, processGameUpdate);
+                socket.on(Constants.MSG_TYPES.UPDATE_LABELS, updateLabels)
                 socket.on(Constants.MSG_TYPES.GAME_OVER, onGameOver)
                 socket.on('disconnect', onDisconnected);
                 resolve();

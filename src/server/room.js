@@ -326,6 +326,20 @@ class Room {
             this.players[playerID].addRegen();
         }
 
+        const player = this.players[playerID];
+
+        const update_lvl_data = {
+            damageUpLvl: player.damage_lvl,
+            damageDecLvl: player.damage_lvl,
+            speedLvl: player.speed_lvl,
+            reloadLvl: player.reload_lvl,
+            healthLvl: player.hp_lvl,
+            rangeLvl: player.range_lvl,
+            regenLvl: player.regen_lvl
+        }
+
+        this.sockets[playerID].emit(Constants.MSG_TYPES.UPDATE_LABELS, update_lvl_data);
+
     }
 }
 
