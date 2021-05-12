@@ -6,6 +6,7 @@
   "scripts": {
     "build": "cross-env NODE_ENV=production webpack --mode production",
     "start": "cross-env NODE_ENV=production node src/server/server.js",
+    "prod": "cross-env NODE_ENV=production webpack --mode production  && echo \"\n\n\" && node src/server/server.js",
     "dev": "cross-env NODE_ENV=development webpack --mode development",
     "develop": "cross-env NODE_ENV=development node src/server/server.js",
     "all": "cross-env NODE_ENV=development webpack --mode development && echo \"\n\n\" && node src/server/server.js"
