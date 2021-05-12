@@ -17,6 +17,8 @@ const regenAdd_btn = document.getElementById('regen-btn');
 const rangeAdd_btn = document.getElementById('range-btn');
 const speedAdd_btn = document.getElementById('speed-btn');
 const reloadAdd_btn = document.getElementById('reload-btn');
+const upgrade_menu = document.getElementById('upgrade-menu');
+
 
 
 
@@ -26,6 +28,7 @@ export var mouseX = 0;
 export var mouseY = 0;
 
 var mouseUp = true;
+var button_pressed = false;
 
 
 function onMouseMove(event) {
@@ -36,6 +39,17 @@ function onMouseMove(event) {
 
 function onMouseDown(event) {
     mouseUp = false;
+
+    // setTimeout(() => {
+    //     if (button_pressed){
+    //         return;
+    //     }
+    // }, 20);
+
+    if (button_pressed){
+        button_pressed = false;
+        return;
+    }
 
     var shoot_int = setInterval(() => {
         const dir = Math.atan2(mouseY - canvasHeight / 2, mouseX - canvasWidth / 2);
@@ -69,6 +83,10 @@ function handleMove(x, y) {
 
 
 // listen for upgrade
+
+function onMenuClicked(event){
+    button_pressed = true;
+}
 
 function onDamageAdd(){
     addDamage('damage_add');
@@ -104,6 +122,8 @@ export function startCapturingInput() {
     window.addEventListener('mouseup', onMouseUp);
     window.addEventListener('mousedown', onMouseDown);
 
+
+    upgrade_menu.addEventListener('click', onMenuClicked);
     damageAdd_btn.addEventListener('click', onDamageAdd);
     damageDec_btn.addEventListener('click', onDamageDec);
     reloadAdd_btn.addEventListener('click', onReloadAdd);

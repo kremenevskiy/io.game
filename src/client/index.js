@@ -65,6 +65,4 @@ function onGameOver() {
         deadMenu.classList.add('hidden');
         playMenu.classList.remove('hidden');
     }
-
-
 }
