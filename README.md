@@ -7,12 +7,12 @@
 > Fact : The game will continue to develop 
 
 ---
-###Game preview
+### Game preview
 ![](images/game-img-7.png)
 ___
 
 ## How to run:
-###1. Run Server
+### 1. Run Server
 #### Run Server in develop mode
 ```angular2html
 1. npm run all
