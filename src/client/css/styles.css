@@ -186,26 +186,27 @@ button:focus {
 
 #upgrade-menu {
     position: fixed;
-    top: 70%;
-    left: 5%;
+    top: 75%;
+    left: 5px;
     /*transform: translateY(-50%) translateX(-50%);*/
     padding: 0;
     background-color: transparent;
     color: black;
     display: grid;
-    /*flex-direction: column;*/
-    /*align-items: center;*/
     border-radius: 20px;
     text-align: center;
 }
-
-#upgrade-menu button{
-    width: 110px;
-    border-width: 1px;
-}
-
 #upgrade-menu p{
-    width: 150px;
     margin:0;
     padding: 0;
+}
+
+
+#upgrade-menu button{
+    width: 60px;
+    align-items: flex-start;
+    padding: 5px 1px;
+    font-size: 10px;
+
+    border-width: 1px;
 }
