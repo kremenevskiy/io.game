@@ -265,15 +265,15 @@ class Room {
 
 
         // const visible_dist = Constants.MAP_SIZE * 4;
-        const visible_dist = player.canvas_size / 2 * Math.sqrt(2) * (player.zoom + 0.5);
+        const visible_dist = player.canvas_size / 2 * Math.sqrt(2) / (player.zoom + 0.5);
 
 
         const nearbyPlayers = Object.values(this.players)
             .filter(p => p!==player && p.pos.dist(player.pos) <= visible_dist);
+
         const nearbyBullets = this.bullets.filter(b => b.pos.dist(player.pos) <= visible_dist);
         const nearbyFood = this.foods.filter(f => f.pos.dist(player.pos) <= visible_dist);
-
-
+        
         return {
             me: player.serializeForUpdate(),
             others: nearbyPlayers.map(p => p.serializeForUpdate()),
