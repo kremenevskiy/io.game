@@ -260,13 +260,22 @@ class Player extends MovableObject {
 
 
     addScore(score){
-        this.score += score;
-        this.progress_to_next_lvl += score;
+        this.score = Math.floor(this.score + score);
 
-        if (this.progress_to_next_lvl > Math.pow(this.player_lvl, 2)){
+
+        let score_to_next_lvl = Math.pow(this.player_lvl, 2) - this.progress_to_next_lvl;
+        if (score > score_to_next_lvl) {
+            score -= score_to_next_lvl;
             this.upgrade_level();
         }
 
+
+        while(score > Math.pow(this.player_lvl, 2)){
+            score -= Math.pow(this.player_lvl, 2);
+            this.upgrade_level();
+        }
+
+        this.progress_to_next_lvl += score;
     }
 
 
@@ -290,7 +299,9 @@ class Player extends MovableObject {
 
     addHealth(){
         this.hp_lvl ++;
-        this.hp = this.hp_lvl * this.hp;
+        if (this.hp === this.hp_max){
+            this.hp = this.hp_lvl * Constants.PLAYER_MAX_HP;
+        }
         this.hp_max = this.hp_lvl * Constants.PLAYER_MAX_HP;
 
     }
