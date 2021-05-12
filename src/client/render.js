@@ -49,6 +49,15 @@ function render() {
     c.restore();
 
 
+    // draw score_to_next lvl
+
+    c.beginPath();
+    c.fillStyle = 'yellow';
+    c.fillRect(300, 100,  800, 10);
+    c.fillStyle = 'blue';
+    c.fillRect(300, 100,800 *  (1 - ((Math.pow(me.lvl, 2) - me.score_to_next_lvl) / Math.pow(me.lvl, 2))), 10);
+
+
 
     // Draw score
     c.beginPath();
@@ -59,6 +68,25 @@ function render() {
     // console.log("mess: " + score_msg);
     c.fillText(score_msg, canvasWidth * 0.08, canvasHeight * 0.08);
     c.fill();
+
+    // draw level
+    c.beginPath();
+    c.fillStyle = "black";
+    c.textAlign = "center";
+    c.font = '30px serif';
+    let level_msg = "Level: " + me.lvl.toString();
+    c.fillText(level_msg, canvasWidth * 0.08, canvasHeight * 0.15);
+
+
+    // draw free point to update
+
+    c.beginPath();
+    c.fillStyle = "black";
+    c.textAlign = "center";
+    c.font = '30px serif';
+    let points_msg = "Free points: " + me.update_points;
+    c.fillText(points_msg, canvasWidth * 0.08, canvasHeight * 0.22);
+
 }
 
 var strokeColor = getRandomColor();
