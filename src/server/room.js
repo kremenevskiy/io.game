@@ -8,13 +8,13 @@ class Room {
         this.sockets = {};
         this.players = {};
         this.bullets = [];
-        this.max_food_amount = Constants.MAP_SIZE / 3;
+        this.food_amount_max = Constants.MAP_SIZE / 3;
         this.foods = [];
         setInterval(this.update.bind(this), 1000/60);
         setInterval(this.updateFood.bind(this), 1000/5);
 
 
-        this.players_max_lvl = 20;
+        this.players_lvl_max = 20;
     }
 
 
@@ -27,7 +27,7 @@ class Room {
     }
 
     updateFood() {
-        if (this.foods.length < this.max_food_amount) {
+        if (this.foods.length < this.food_amount_max) {
             var generate = Math.random();
             if (generate > 0.5){
                 this.foods.push(this.generateOneFood());
@@ -273,7 +273,8 @@ class Room {
 
         const nearbyBullets = this.bullets.filter(b => b.pos.dist(player.pos) <= visible_dist);
         const nearbyFood = this.foods.filter(f => f.pos.dist(player.pos) <= visible_dist);
-        
+
+
         return {
             me: player.serializeForUpdate(),
             others: nearbyPlayers.map(p => p.serializeForUpdate()),
@@ -290,7 +291,7 @@ class Room {
             return;
         }
 
-        if (!(this.players[playerID].player_lvl < this.players_max_lvl)){
+        if (!(this.players[playerID].player_lvl < this.players_lvl_max)){
             return;
         }
 

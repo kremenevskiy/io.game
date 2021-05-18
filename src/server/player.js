@@ -41,8 +41,7 @@ class Player extends MovableObject {
         this.points_to_upgrade = 0;
 
 
-        this.damage_lvl = 1;
-        this.speed_lvl = 1;
+
         this.hp_lvl = 1;
         this.reload_lvl = 1;
         this.range_lvl = 1;

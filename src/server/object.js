@@ -5,8 +5,7 @@ class Object {
     constructor(id, x, y){
         this.id = id;
         this.pos = new Vector(x, y);
-        this.x = x;
-        this.y = y;
+
     }
 
     checkMapConstraints() {
