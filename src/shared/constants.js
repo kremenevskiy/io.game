@@ -17,7 +17,7 @@ module.exports = Object.freeze({
 
     FOOD_RADIUS: 10,
 
-    MAP_SIZE: 700,
+    MAP_SIZE: 1000,
     MSG_TYPES: {
 
         DAMAGE_ADD: 'damage_add',
