@@ -7,6 +7,8 @@ const Constants = require('../shared/constants')
 const Room = require('./room')
 const Vector = require('./vector')
 const path = require('path')
+const bodyParser = require('body-parser')
+const mongoose = require('mongoose')
 
 const jwt = require('jsonwebtoken')
 
@@ -18,7 +20,7 @@ const width = 1000;
 const height = 1000;
 
 var app = express();
-app.use(express.json())
+app.use(bodyParser.json())
 
 const posts = [
     {
@@ -44,19 +46,38 @@ function authenticateToken(req, res, next) {
     jwt.verify(token, "" + process.env.ACCESS_TOKEN_SECRET, (err, user) => {
         if (err) return res.sendStatus(403)
         req.user = user
+
         next()
     })
 }
-var server = app.listen(process.env.PORT || 3000, 'localhost', listen);
 
 function listen(){
     var host = server.address().address;
     var port = server.address().port;
-    console.log("Server listening on http://" + host + ":" + port);
+    console.log("\nServer listening on http://" + host + ":" + port);
 }
+
+const start = async () => {
+    try {
+        await mongoose.connect("mongodb+srv://krem:qwerty123@maincluster.oape2.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+        listen();
+    }
+    catch (e) {
+        console.log("error at starting server: ", e);
+    }
+}
+
+var server = app.listen(process.env.PORT || 3000, 'localhost', start);
+
+
 
 
 app.use(express.static('dist'));
+
+app.post('/register', async (req, res) => {
+    console.log(req.body);
+    res.json({status: "ok"})
+})
 
 
 var io = require('socket.io')(server);
