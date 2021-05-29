@@ -26,7 +26,7 @@ async function registerUser(event){
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
 
-    const result = await fetch('/register', {
+    const result = await fetch('/api/register', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -36,8 +36,70 @@ async function registerUser(event){
             password
         })
     }).then((res) => res.json());
+
+    if (result.status === 'ok') {
+        alert('Successful registration!!');
+    }
+    else {
+        console.log(result)
+        alert(result.error);
+    }
 }
 
+
+const login_form = document.getElementById('login-form');
+login_form.addEventListener('submit', loginUser)
+
+async function loginUser(event){
+    event.preventDefault();
+    const username = document.getElementById('login_username').value;
+    const password = document.getElementById('login_password').value;
+
+    const result = await fetch('/api/login', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            username,
+            password
+        })
+    }).then((res) => res.json());
+
+    if (result.status === 'ok') {
+        alert('Successful login!!');
+        localStorage.setItem('token', result.data);
+    }
+    else {
+        alert(result.error);
+    }
+}
+
+const changePassword_form = document.getElementById('change_password-form');
+changePassword_form.addEventListener('submit', changePassword)
+async function changePassword(event){
+    event.preventDefault();
+    const password = document.getElementById('new_password').value;
+
+    const result = await fetch('/api/change-password', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            newPassword: password,
+            token: localStorage.getItem('token')
+        })
+    }).then((res) => res.json());
+
+    if (result.status === 'ok') {
+        alert('Successful change password!!');
+        console.log("Got the token", result.data)
+    }
+    else {
+        alert(result.error);
+    }
+}
 
 
 

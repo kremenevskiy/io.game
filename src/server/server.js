@@ -9,6 +9,7 @@ const Vector = require('./vector')
 const path = require('path')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
+const appRouter =  require('./appRouter')
 
 const jwt = require('jsonwebtoken')
 
@@ -22,34 +23,34 @@ const height = 1000;
 var app = express();
 app.use(bodyParser.json())
 
-const posts = [
-    {
-        username: 'Vlad',
-        title: 'Post 1'
-    },
-    {
-        username: 'Jim',
-        title: 'Post 2'
-    }
-]
-app.get('/posts', authenticateToken, (req, res) => {
-    res.json(posts.filter(post => post.username === req.user.name))
-})
+// const posts = [
+//     {
+//         username: 'Vlad',
+//         title: 'Post 1'
+//     },
+//     {
+//         username: 'Jim',
+//         title: 'Post 2'
+//     }
+// ]
+// app.get('/posts', authenticateToken, (req, res) => {
+//     res.json(posts.filter(post => post.username === req.user.name))
+// })
 
 
 
-function authenticateToken(req, res, next) {
-    const authHeader = req.headers['authorization']
-    const token = authHeader && authHeader.split(' ')[1]
-    if (token == null) return res.sendStatus(401)
-
-    jwt.verify(token, "" + process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-        if (err) return res.sendStatus(403)
-        req.user = user
-
-        next()
-    })
-}
+// function authenticateToken(req, res, next) {
+//     const authHeader = req.headers['authorization']
+//     const token = authHeader && authHeader.split(' ')[1]
+//     if (token == null) return res.sendStatus(401)
+//
+//     jwt.verify(token, "" + process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+//         if (err) return res.sendStatus(403)
+//         req.user = user
+//
+//         next()
+//     })
+// }
 
 function listen(){
     var host = server.address().address;
@@ -69,15 +70,11 @@ const start = async () => {
 
 var server = app.listen(process.env.PORT || 3000, 'localhost', start);
 
-
+app.use('/api', appRouter);
 
 
 app.use(express.static('dist'));
 
-app.post('/register', async (req, res) => {
-    console.log(req.body);
-    res.json({status: "ok"})
-})
 
 
 var io = require('socket.io')(server);
