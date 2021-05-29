@@ -4,22 +4,41 @@ import {startCapturingInput, stopCapturingInput} from "./input"
 import {startRendering, stopRendering} from "./render";
 import {setLeaderboardHidden} from "./leaderboard";
 
-const canvas = document.querySelector('canvas');
-const playButton = document.getElementById('play-button');
-const noConnectionButton = document.getElementById('no-connect-button');
-const noConnectModal = document.getElementById('no-connect-modal');
-const playMenu = document.getElementById('play-menu');
-const usernameInput = document.getElementById('username-input');
-const leaderboard = document.getElementById('leaderboard');
-const deadMenu = document.getElementById('dead-menu');
-const deadButton = document.getElementById('dead-button');
 
-const upgradeMenu = document.getElementById('upgrade-menu');
+const login_menu = document.getElementById('Login_menu');
+login_menu.classList.remove('hidden')
+const registration_menu = document.getElementById('Registration_menu');
+
+// login page
+
+const go_signup_btn = document.getElementById('go-signup-btn');
+go_signup_btn.addEventListener('click', goSignup);
+
+function goSignup(event) {
+    setTimeout(() => {
+        login_menu.classList.add('hidden');
+        registration_menu.classList.remove('hidden');
+    }, 200);
+}
+
+
+const go_login_btn = document.getElementById('go-login-btn');
+go_login_btn.addEventListener('click', goLogin);
+
+function goLogin(event) {
+    setTimeout(() => {
+        login_menu.classList.remove('hidden');
+        registration_menu.classList.add('hidden');
+    }, 200);
+}
+
+
+
 
 
 // Register user staff
-const form = document.getElementById('reg-form');
-form.addEventListener('submit', registerUser)
+
+// registration_form.addEventListener('submit', registerUser)
 
 async function registerUser(event){
     event.preventDefault();
@@ -47,8 +66,10 @@ async function registerUser(event){
 }
 
 
-const login_form = document.getElementById('login-form');
-login_form.addEventListener('submit', loginUser)
+
+
+
+// login_form.addEventListener('submit', loginUser)
 
 async function loginUser(event){
     event.preventDefault();
@@ -104,7 +125,19 @@ async function changePassword(event){
 
 
 
+const canvas = document.querySelector('canvas');
+const playButton = document.getElementById('play-button');
+const noConnectionButton = document.getElementById('no-connect-button');
+const noConnectModal = document.getElementById('no-connect-modal');
+const playMenu = document.getElementById('play-menu');
+const usernameInput = document.getElementById('username-input');
+const leaderboard = document.getElementById('leaderboard');
+const deadMenu = document.getElementById('dead-menu');
+const deadButton = document.getElementById('dead-button');
 
+const upgradeMenu = document.getElementById('upgrade-menu');
+
+const authMenu = document.getElementById('auth');
 
 
 canvas.width = window.innerWidth;
@@ -134,6 +167,7 @@ function playClicked() {
     play(usernameInput.value);
     startCapturingInput();
     setLeaderboardHidden(false);
+    authMenu.classList.add('hidden');
 
     // start rendering 100 ms later
     // so bcs waiting first update from server
@@ -154,5 +188,6 @@ function onGameOver() {
     deadButton.onclick = () => {
         deadMenu.classList.add('hidden');
         playMenu.classList.remove('hidden');
+        authMenu.classList.remove('hidden');
     }
 }
