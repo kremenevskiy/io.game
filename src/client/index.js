@@ -6,13 +6,13 @@ import {setLeaderboardHidden} from "./leaderboard";
 
 
 const login_menu = document.getElementById('Login_menu');
-login_menu.classList.remove('hidden')
 const registration_menu = document.getElementById('Registration_menu');
-
-// login page
 
 const go_signup_btn = document.getElementById('go-signup-btn');
 go_signup_btn.addEventListener('click', goSignup);
+
+const go_login_btn = document.getElementById('go-login-btn');
+go_login_btn.addEventListener('click', goLogin);
 
 function goSignup(event) {
     setTimeout(() => {
@@ -20,10 +20,6 @@ function goSignup(event) {
         registration_menu.classList.remove('hidden');
     }, 200);
 }
-
-
-const go_login_btn = document.getElementById('go-login-btn');
-go_login_btn.addEventListener('click', goLogin);
 
 function goLogin(event) {
     setTimeout(() => {
@@ -36,40 +32,46 @@ function goLogin(event) {
 
 
 
-// Register user staff
+// registration handling
+const registration_form = document.getElementById('registration-form');
+registration_form.addEventListener('submit', registerUser);
+const emailError = document.querySelector('.username.error');
+const passwordError = document.querySelector('.password.error');
+const successRegister = document.querySelector('.register.success');
 
-// registration_form.addEventListener('submit', registerUser)
+function cleanErrors() {
+    emailError.textContent = '';
+    passwordError.textContent = '';
+    successRegister.textContent = '';
+}
 
 async function registerUser(event){
     event.preventDefault();
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
+    const username = document.getElementById('register_username').value;
+    const password = document.getElementById('register_password').value;
+    cleanErrors();
 
-    const result = await fetch('/api/register', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            username,
-            password
-        })
-    }).then((res) => res.json());
+    try{
+        const result = await fetch('/api/register', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({username: username, password: password})
+        }).then((res) => res.json());
 
-    if (result.status === 'ok') {
-        alert('Successful registration!!');
+        if (result.status === 'ok') {
+            successRegister.textContent = `${username} successfully registered!`;
+        }
+        else {
+            emailError.textContent = result.error.username;
+            passwordError.textContent = result.error.password;
+        }
     }
-    else {
-        console.log(result)
-        alert(result.error);
+    catch (e){
+        console.log('Error in registration: ', e);
     }
 }
 
-
-
-
-
-// login_form.addEventListener('submit', loginUser)
+// login handling
 
 async function loginUser(event){
     event.preventDefault();

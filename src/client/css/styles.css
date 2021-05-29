@@ -20,6 +20,13 @@ hr {
     font-weight: bold;
 }
 
+.success{
+    color: #00ee12;
+    margin: 10px 2px;
+    font-size: 0.8em;
+    font-weight: bold;
+}
+
 button {
     font-size: 18px;
     border: 2px solid black;
