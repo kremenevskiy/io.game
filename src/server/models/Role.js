@@ -5,7 +5,7 @@ const Role = new Schema({
         type: String,
         unique: true,
         default: "USER"
-    }
-})
+    },
+}, {collection: 'roles'})
 
 module.exports = model('Role', Role )
