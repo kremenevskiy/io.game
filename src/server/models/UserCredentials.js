@@ -10,6 +10,11 @@ const UserCredentials = new Schema({
         type: String,
         required: true
     },
+    maxScore: {
+        type: Number,
+        required: false,
+        default: 0
+    },
     roles: [
         {
             type: String,
