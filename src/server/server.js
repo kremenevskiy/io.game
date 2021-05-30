@@ -12,6 +12,9 @@ const mongoose = require('mongoose')
 const appRouter =  require('./appRouter')
 
 const jwt = require('jsonwebtoken')
+const cookieParser = require('cookie-parser');
+
+const userCredentials = require('./models/UserCredentials');
 
 
 
@@ -60,7 +63,9 @@ function listen(){
 
 const start = async () => {
     try {
-        await mongoose.connect("mongodb+srv://krem:qwerty123@maincluster.oape2.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+        await mongoose.connect("mongodb+srv://krem:qwerty123@maincluster.oape2.mongodb.net/myFirstDatabase?retryWrites=true&w=majority", {
+            useNewUrlParser: true
+        })
         listen();
     }
     catch (e) {
@@ -70,10 +75,14 @@ const start = async () => {
 
 var server = app.listen(process.env.PORT || 3000, 'localhost', start);
 
+app.use(cookieParser());
 app.use('/api', appRouter);
 
 
+
+
 app.use(express.static('dist'));
+
 
 
 
@@ -115,12 +124,19 @@ function newConnection(socket){
 
 const room = new Room();
 room.setup();
-function joinGame(username){
-    if (username === ""){
-        username = "NoName";
+function joinGame(player_data){
+    console.log('joined player: ', player_data);
+    if (player_data.gameUsername === ""){
+        player_data.gameUsername = "NoName";
     }
-    console.log('New player joined the game: \nName: ' +  username + "Socket id: " + this.id);
-    room.addPlayer(this, username);
+    let server_name = 'not logged';
+    if (player_data.isLogged){
+        console.log('ddd: ', player_data.usernameLogged);
+        server_name = player_data.usernameLogged;
+    }
+    console.log('servername: ', server_name)
+    console.log('New player joined the game: \nName: ' +  player_data.gameUsername + '\nServer name: ' + server_name + "\nSocket id: " + this.id);
+    room.addPlayer(this, player_data);
 }
 
 // var cnt = 0;
@@ -184,3 +200,32 @@ function reload_add(reloadData) {
 function range_add(rangeData) {
     room.upgradePlayer(this.id, rangeData);
 }
+
+
+async function updatePlayerData(aliveData) {
+    const current_score = aliveData.score;
+    const username = aliveData.username;
+    console.log('sss: ', username);
+    try {
+        const player = await userCredentials.findOne({username});
+
+        if (player) {
+            const player_maxScore = player.maxScore;
+
+            if (current_score > player_maxScore) {
+                await userCredentials.updateOne(
+                    {username},
+                    {$set: {maxScore: current_score}}
+                )
+            }
+        }
+        else{
+            console.log('player not found');
+        }
+    }
+    catch (e){
+        console.log('in update player error: ', e);
+    }
+}
+
+module.exports.do = updatePlayerData;

@@ -12,7 +12,7 @@ function getRandomColor() {
 }
 
 class Player extends MovableObject {
-    constructor(id, username, x, y, r) {
+    constructor(id, username, x, y, r, isLogged, serverName='not logged') {
         // console.log('-------------------------');
         // var args = [...arguments];
         //
@@ -29,6 +29,9 @@ class Player extends MovableObject {
         this.vel_mid = new Vector(0, 0);
         this.velocity = new Vector(-1, 1);
         this.color = getRandomColor();
+
+        this.server_name = serverName;
+        this.isLogged = isLogged;
 
 
         this.damage = Constants.BULLET_DAMAGE;

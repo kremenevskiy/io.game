@@ -2,6 +2,7 @@ const Constants = require('../shared/constants')
 const Player = require('./player')
 const Bullet = require('./bullet')
 const Food = require('./food')
+const updatePlayerData = require('./server')
 
 class Room {
     constructor() {
@@ -44,12 +45,12 @@ class Room {
     }
 
 
-    addPlayer(socket, username){
+    addPlayer(socket, player_data){
         this.sockets[socket.id] = socket;
         const x = Math.floor((Math.random() * 2 - 1) * Constants.MAP_SIZE);
         const y = Math.floor((Math.random() * 2 - 1) * Constants.MAP_SIZE);
         const r = Math.floor(Math.random() * Constants.PLAYER_RADIUS + 10);
-        this.players[socket.id] = new Player(socket.id, username, x, y, r);
+        this.players[socket.id] = new Player(socket.id, player_data.gameUsername, x, y, r, player_data.isLogged, player_data.usernameLogged);
         console.log('Created player on | X: ' + x + "Y: " + y);
         // console.log('after creation new player:');
         // console.log(this.players[socket.id]);
@@ -195,8 +196,14 @@ class Room {
 
             if (player.dead) {
                 let aliveData = {
-                    score: player.score
+                    score: player.score,
+                    username: player.server_name
                 }
+
+                if (player.isLogged){
+                    updatePlayerData.do(aliveData).then(r => console.log(r));
+                }
+
                 socket.emit(Constants.MSG_TYPES.GAME_OVER, aliveData);
                 this.removePlayer(socket);
             }
@@ -343,6 +350,7 @@ class Room {
 
     }
 }
+
 
 
 function lerp(start, end, t){

@@ -53,8 +53,8 @@ function onDisconnected() {
 }
 
 
-export const play = username => {
-    socket.emit(Constants.MSG_TYPES.JOIN_GAME, username);
+export const play = player_data => {
+    socket.emit(Constants.MSG_TYPES.JOIN_GAME, player_data);
 
     const canvas_size = canvasWidth > canvasHeight ? canvasWidth : canvasHeight
     socket.emit(Constants.MSG_TYPES.CANVAS_GET, canvas_size);

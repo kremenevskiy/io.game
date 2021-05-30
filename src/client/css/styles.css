@@ -279,6 +279,47 @@ button:focus {
 /*    text-align: center;*/
 /*}*/
 
+#change_password_menu{
+    position: fixed;
+}
+
+
+#logged_in-menu {
+    position: fixed;
+    top: 50%;
+    right: 10%;
+    transform: translateY(-50%) translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    padding: 20px 30px;
+    /*box-shadow: 1px 2px 3px rgba(0,0,0,0.1);*/
+    border-radius: 10px;
+    background: black;
+    color: white;
+    /*align-items: center;*/
+    align-items: unset;
+}
+
+#change_password_menu {
+    position: fixed;
+    top: 80%;
+    right: 7%;
+    transform: translateY(-50%) translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    padding: 20px 30px;
+    /*box-shadow: 1px 2px 3px rgba(0,0,0,0.1);*/
+    border-radius: 10px;
+    background: black;
+    color: white;
+    /*align-items: center;*/
+    align-items: unset;
+}
+
+
+
 
 
 
