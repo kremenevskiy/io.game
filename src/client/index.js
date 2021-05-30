@@ -7,6 +7,8 @@ import {setLeaderboardHidden} from "./leaderboard";
 
 const login_menu = document.getElementById('Login_menu');
 const registration_menu = document.getElementById('Registration_menu');
+const logged_menu = document.getElementById('logged_in-menu');
+const changePassword_menu = document.getElementById('change_password_menu');
 
 const go_signup_btn = document.getElementById('go-signup-btn');
 go_signup_btn.addEventListener('click', goSignup);
@@ -35,13 +37,13 @@ function goLogin(event) {
 // registration handling
 const registration_form = document.getElementById('registration-form');
 registration_form.addEventListener('submit', registerUser);
-const emailError = document.querySelector('.username.error');
-const passwordError = document.querySelector('.password.error');
+const usernameError_registration = document.querySelector('.username.error');
+const passwordError_registration = document.querySelector('.password.error');
 const successRegister = document.querySelector('.register.success');
 
-function cleanErrors() {
-    emailError.textContent = '';
-    passwordError.textContent = '';
+function cleanErrors_registration() {
+    usernameError_registration.textContent = '';
+    passwordError_registration.textContent = '';
     successRegister.textContent = '';
 }
 
@@ -49,7 +51,7 @@ async function registerUser(event){
     event.preventDefault();
     const username = document.getElementById('register_username').value;
     const password = document.getElementById('register_password').value;
-    cleanErrors();
+    cleanErrors_registration();
 
     try{
         const result = await fetch('/api/register', {
@@ -62,8 +64,8 @@ async function registerUser(event){
             successRegister.textContent = `${username} successfully registered!`;
         }
         else {
-            emailError.textContent = result.error.username;
-            passwordError.textContent = result.error.password;
+            usernameError_registration.textContent = result.error.username;
+            passwordError_registration.textContent = result.error.password;
         }
     }
     catch (e){
@@ -73,36 +75,92 @@ async function registerUser(event){
 
 // login handling
 
+const login_form = document.getElementById('login-form');
+login_form.addEventListener('submit', loginUser);
+const usernameError_login = document.querySelector('.usernameLogin.error');
+const passwordError_login = document.querySelector('.passwordLogin.error');
+const successLogin = document.querySelector('.login.success');
+
+const changePassword_btn = document.getElementById('go_change_password');
+changePassword_btn.addEventListener('click', changePasswordOn);
+
+function changePasswordOn(event) {
+    changePassword_menu.classList.remove('hidden');
+    changePassword_btn.classList.add('disabled');
+}
+
+
+function cleanErrors_login() {
+    usernameError_login.textContent = '';
+    passwordError_login.textContent = '';
+    successRegister.textContent = '';
+}
+
+
+const logged_username = document.getElementById('logged_username');
+const logged_maxScore = document.getElementById('logged_maxScore');
+
+
+let isLogged = false;
+let usernameLogged = '';
+
 async function loginUser(event){
     event.preventDefault();
     const username = document.getElementById('login_username').value;
     const password = document.getElementById('login_password').value;
 
-    const result = await fetch('/api/login', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            username,
-            password
-        })
-    }).then((res) => res.json());
+    try {
+        cleanErrors_login();
+        const result = await fetch('/api/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                username,
+                password
+            })
+        }).then((res) => res.json());
 
-    if (result.status === 'ok') {
-        alert('Successful login!!');
-        localStorage.setItem('token', result.data);
+        if (result.status === 'ok') {
+            successLogin.textContent = "Login successful";
+            setTimeout(() => {
+                login_menu.classList.add('hidden');
+                logged_menu.classList.remove('hidden');
+                logged_username.textContent = result.data.username;
+                logged_maxScore.textContent = result.data.maxScore;
+                isLogged = true;
+                usernameLogged = result.data.username;
+
+            }, 1000);
+        } else {
+            usernameError_login.textContent = result.error.username;
+            passwordError_login.textContent = result.error.password;
+        }
     }
-    else {
-        alert(result.error);
+    catch (e){
+        console.log('Error in login: ', e);
     }
 }
 
 const changePassword_form = document.getElementById('change_password-form');
-changePassword_form.addEventListener('submit', changePassword)
+changePassword_form.addEventListener('submit', changePassword);
+
+const changePasswordSuccess = document.querySelector('.changePassword.success');
+const oldPasswordError = document.querySelector('.oldPassword.error');
+const newPasswordError = document.querySelector('.newPassword.error');
+
+function cleanErrorPassword() {
+    oldPasswordError.textContent = '';
+    newPasswordError.textContent = '';
+}
+
 async function changePassword(event){
     event.preventDefault();
-    const password = document.getElementById('new_password').value;
+    const oldPassword = document.getElementById('old_password').value;
+    const newPassword = document.getElementById('new_password').value;
+
+    cleanErrorPassword();
 
     const result = await fetch('/api/change-password', {
         method: 'POST',
@@ -110,20 +168,43 @@ async function changePassword(event){
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            newPassword: password,
-            token: localStorage.getItem('token')
+            oldPassword: oldPassword,
+            newPassword: newPassword,
         })
     }).then((res) => res.json());
 
     if (result.status === 'ok') {
-        alert('Successful change password!!');
-        console.log("Got the token", result.data)
+        changePasswordSuccess.textContent = 'Password changed successful';
+        setTimeout(() => {
+            changePassword_menu.classList.add('hidden');
+        }, 200);
     }
     else {
-        alert(result.error);
+        console.log(result.error);
+        oldPasswordError.textContent = result.error.oldPassword;
+        newPasswordError.textContent = result.error.newPassword;
     }
 }
 
+
+
+const logout_btn = document.getElementById('logout-btn');
+logout_btn.addEventListener('click', logout);
+
+async function logout(event) {
+    try{
+        const result = await fetch('/api/logout', {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json'}
+        }).then(res => res.json());
+        isLogged = false;
+        window.location.reload(true);
+    }
+
+    catch (e) {
+        console.log('Error in logout: ', e);
+    }
+}
 
 
 
@@ -166,7 +247,13 @@ function playClicked() {
     playMenu.classList.add('hidden');
     canvas.classList.remove('hidden');
     upgradeMenu.classList.remove('hidden');
-    play(usernameInput.value);
+    const player_data = {
+        gameUsername: usernameInput.value,
+        isLogged: isLogged,
+        usernameLogged: usernameLogged
+    }
+    console.log(player_data.usernameLogged);
+    play(player_data);
     startCapturingInput();
     setLeaderboardHidden(false);
     authMenu.classList.add('hidden');
@@ -180,7 +267,15 @@ function playClicked() {
 }
 
 
-function onGameOver() {
+function onGameOver(aliveData) {
+
+    const score = aliveData.score;
+    const prev_score = logged_maxScore.textContent;
+
+    if (score > prev_score) {
+        logged_maxScore.textContent = score;
+    }
+
     stopCapturingInput();
     stopRendering();
     setLeaderboardHidden(true);

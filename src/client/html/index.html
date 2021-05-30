@@ -130,12 +130,13 @@
 
             <form id="login-form">
                 <h3>Login</h3>
+                <div class="login success"></div>
                 <label for="login_username">Username</label>
                 <input type="text" autocomplete="off" id="login_username" placeholder="Username"/>
-                <div class="username error"></div>
+                <div class="usernameLogin error"></div>
                 <label for="login_password">Password</label>
                 <input type="password" autocomplete="off" id="login_password" placeholder="Password"/>
-                <div class="password error"></div>
+                <div class="passwordLogin error"></div>
                 <button type="submit" class="authButton">Login</button>
                 <br>
                 <div id="not_logged">
@@ -145,9 +146,24 @@
             </form>
 
         </div>
+
+        <div id="logged_in-menu" class="hidden auth">
+            <div id="admin_logged_in" class="hidden">
+                <label>ADMIN</label>
+                <label>Users playing: </label> <label id="admin_count_playing_users"></label>
+            </div>
+
+            <label>Username: </label> <label id="logged_username"></label>
+            <label>MaxScore: </label> <label id="logged_maxScore"></label>
+            <button type="button" id="go_change_password" class="">Change Password</button>
+            <button type="button" id="logout-btn">Logout</button>
+        </div>
+
         <div id="change_password_menu" class="hidden auth">
-            <h3>changePassword</h3>
+
             <form id="change_password-form">
+                <h3>Change Password</h3>
+                <div class="changePassword success"></div>
                 <label for="old_password">Old Password</label>
                 <input type="password" autocomplete="off" id="old_password" placeholder="Password"/>
                 <div class="oldPassword error"></div>
@@ -158,6 +174,7 @@
             </form>
         </div>
     </div>
+
 
 
 

@@ -12,7 +12,8 @@ router.post('/register',[
 ], controller.registration);
 
 router.post('/login', controller.login);
-router.post('/change-password', controller.changePass)
+router.post('/change-password', controller.changePass);
+router.get('/logout', controller.logout);
 
 
 module.exports = router
