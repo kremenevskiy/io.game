@@ -77,6 +77,11 @@ var server = app.listen(process.env.PORT || 3000, 'localhost', start);
 
 app.use(cookieParser());
 app.use('/api', appRouter);
+// app.get('/', (req, res) => {
+//     console.log('refresh?');
+//     // res.json({st: 'good'})
+//     res.se
+// })
 
 
 

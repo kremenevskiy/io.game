@@ -1,21 +1,19 @@
 const jwt = require('jsonwebtoken')
 const {secret} = require('../config')
-module.exports = function (req, res, next) {
-    if (req.method === "OPTIONS") {
-        next()
+
+const checkAuth = (req, res, next) => {
+    const token = req.cookies.jwt;
+    if (token) {
+        jwt.verify(token, secret, (err, decodedToken) => {
+            if (err) {
+                return res.status(400).json({authorised: false})
+            }
+            next();
+        })
     }
-    try {
-        const token = req.headers.authorization.split(' ')[1]
-        if (!token) {
-            return res.status(403).json({message: "User is unauthorised"})
-        }
-        const decodeData = jwt.verify(token, secret)
-        req.user = decodeData
-        console.log('user: ', req.user)
-        next()
-    }
-    catch (e) {
-        console.log(e)
-        return res.status(403).json({message: "User is unauthorised"})
+    else {
+        return res.status(200).json({authorised: false})
     }
 }
+
+module.exports = checkAuth;
