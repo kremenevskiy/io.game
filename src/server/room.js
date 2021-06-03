@@ -3,19 +3,18 @@ const Player = require('./player')
 const Bullet = require('./bullet')
 const Food = require('./food')
 const updatePlayerData = require('./server')
+const ObjectsFactory = require('./objectsFactory')
 
 class Room {
     constructor() {
-        this.sockets = {};
-        this.players = {};
-        this.bullets = [];
+        this.sockets = {}; // словарь подлюченных сокетов
+        this.players = {}; // словарь подлюченных игроков
+        this.bullets = []; // все живые пули
         this.food_amount_max = Constants.MAP_SIZE / 3;
-        this.foods = [];
-        setInterval(this.update.bind(this), 1000/60);
-        setInterval(this.updateFood.bind(this), 1000/5);
-
-
-        this.players_lvl_max = 20;
+        this.foods = []; // вся еда на карте
+        setInterval(this.update.bind(this), 1000/60); // устанавливаемм частоту посылок данных на клиента
+        setInterval(this.updateFood.bind(this), 1000/5); // частота добавления игры на карту
+        this.players_lvl_max = 20; // максимальный уровень игрока
     }
 
 
@@ -26,6 +25,7 @@ class Room {
             this.foods.push(this.generateOneFood());
         }
     }
+
 
     updateFood() {
         if (this.foods.length < this.food_amount_max) {
@@ -41,7 +41,12 @@ class Room {
         const x = Math.floor((Math.random() * 2 - 1) * Constants.MAP_SIZE);
         const y = Math.floor((Math.random() * 2 - 1) * Constants.MAP_SIZE);
         const id = this.foods.length;
-        return new Food(id, x, y);
+        const food_data = {
+            id: id,
+            x: x,
+            y: y
+        }
+        return new ObjectsFactory('food', food_data);
     }
 
 
@@ -52,14 +57,12 @@ class Room {
         const r = Math.floor(Math.random() * Constants.PLAYER_RADIUS + 10);
         this.players[socket.id] = new Player(socket.id, player_data.gameUsername, x, y, r, player_data.isLogged, player_data.usernameLogged);
         console.log('Created player on | X: ' + x + "Y: " + y);
-        // console.log('after creation new player:');
-        // console.log(this.players[socket.id]);
     }
+
 
     updatePlayerCanvas(playerId, canvas_size){
         this.players[playerId].canvas_size = canvas_size;
     }
-
 
 
     addBullet(bulletID, bullet_dir){
@@ -71,17 +74,39 @@ class Room {
 
             return;
         }
-
         if(player.canShoot()) {
 
             const bullet_x = this.players[bulletID].pos.x;
             const bullet_y = this.players[bulletID].pos.y;
-            this.bullets.push(new Bullet(bulletID, bullet_x, bullet_y, bullet_dir, player.bullet_speed,
-                player.damage, player.bullet_radius,  player.r, player.shoot_range));
-            // console.log('number of bullets: ' + this.bullets.length)
-            // console.log('made bullet by: ', player, ' bullet: ', this.bullets[this.bullets.length-1]);
+            const bullet_data = {
+                parentID: bulletID,
+                x: bullet_x,
+                y: bullet_y,
+                dir: bullet_dir,
+                speed: player.bullet_speed,
+                damage: player.damage,
+                radius: player.bullet_radius,
+                player_r: player.r,
+                range_shoot: player.shoot_range
+            }
+            // this.bullets.push(new Bullet(bulletID, bullet_x, bullet_y, bullet_dir, player.bullet_speed,
+            //     player.damage, player.bullet_radius,  player.r, player.shoot_range));
+            this.bullets.push(new ObjectsFactory('bullet', bullet_data))
             player.makeShoot(this.bullets[this.bullets.length - 1]);
         }
+    }
+
+
+    updatePlayerDecorator(playerID, update_data) {
+        const vel_x = update_data.vel_mid.x;
+        const vel_y = update_data.vel_mid.y;
+
+        if (Math.abs(vel_x) <= 2  && Math.abs(vel_y) <= 2) {
+            this.players[playerID].vel_mid.x = 0;
+            this.players[playerID].vel_mid.y = 0;
+            return;
+        }
+        this.updatePlayer(playerID, update_data);
     }
 
 
@@ -96,7 +121,6 @@ class Room {
                     player.pos.dist(bullet.pos) <= player.r + bullet.r){
                     destroyedBullets.push(bullet);
                     player.takeBulletDamage(bullet.damage);
-                    // console.log('player got damage ' + player.id + " from: " + this.players[bullet.id].id)
                     break;
                 }
             }
@@ -106,33 +130,22 @@ class Room {
 
 
     updatePlayer(playerID, update_data){
-
-
-        // console.log("player to update id: " + playerID);
-        // console.log("players: ");
-        // Object.keys(this.players).forEach(p => {
-        //     console.log(p);
-        // })
         if (this.players[playerID]) {
-            // console.log('updating him:')
-            // console.log(this.players[playerID])
-            // console.log("with: x:" + x + "y: " + y + "dir: " + dir)
             const dir = update_data.dir;
             const vel_mid_x = update_data.vel_mid.x;
             const vel_mid_y = update_data.vel_mid.y;
-
-            // console.log('dir: ' + dir + " x: " + vel_mid_x + "y: " + vel_mid_y)
-
             this.players[playerID].vel_mid.x = vel_mid_x;
             this.players[playerID].vel_mid.y = vel_mid_y;
             this.players[playerID].updateDirection(dir);
         }
     }
 
+
     removePlayer(socket){
         delete this.sockets[socket.id];
         delete this.players[socket.id];
     }
+
 
     update(){
         // update each bullet
@@ -156,7 +169,6 @@ class Room {
         // update every player position
         Object.values(this.players).forEach(player => player.update());
 
-
         // check if players can eat food nearby and eat it
         Object.values(this.players).forEach(player => {
             for(let i = 0; i < this.foods.length; ++i) {
@@ -176,8 +188,6 @@ class Room {
         })
         this.bullets = this.bullets.filter(bullet => !destroyedBullets.includes(bullet));
 
-
-
         // check if can eat other players
         const all_players = Object.values(this.players);
         all_players.forEach(player => {
@@ -185,9 +195,6 @@ class Room {
                 player.eatsPlayer(other);
             })
         })
-
-
-
 
         // check if there is dead players
         Object.keys(this.players).forEach(playerID => {
@@ -199,7 +206,6 @@ class Room {
                     score: player.score,
                     username: player.server_name
                 }
-
                 if (player.isLogged){
                     updatePlayerData.do(aliveData).then(r => console.log(r));
                 }
@@ -209,39 +215,15 @@ class Room {
             }
         })
 
-
-
-        // console.log('\t\t\t\t\t------------------uuuuuuupdate')
-        // console.log(this.players)
-
-
-        // update each player
-        // Object.keys(this.players).forEach(playerID => {
-        //     this.players[playerID].update(); // create update
-        // })
-
-
         // send update for each player
-        // console.log('\t\t\t\t\t-----------------------------')
-        // console.log(this.players)
-        // console.log('making update game to client:')
-
         Object.keys(this.sockets).forEach(playerID => {
             let leaderboard = this.getLeaderboard(this.players[playerID])
             const socket = this.sockets[playerID];
-            // console.log('*******************************')
             const player = this.players[playerID];
-            // console.log('player before serializing');
-            // console.log(player);
-            // console.log('ser|||||||||ser')
-            // console.log(player.serializeForUpdate());
-            // console.log(this.createUpdate(player));
-            // console.log('*******************************')
-
             socket.emit(Constants.MSG_TYPES.GAME_UPDATE, this.createUpdate(player, leaderboard));
-
         })
     }
+
 
     getLeaderboard(player) {
         let players = Object.values(this.players)
@@ -259,28 +241,20 @@ class Room {
     }
 
     createUpdate(player, leaderboard){
-        // console.log('sending update');
-        var data = {
+        let data = {
             me: player.serializeForUpdate(),
             others: Object.values(this.players).map(p => p.serializeForUpdate()),
             bullets: this.bullets.map(b => b.serializeForUpdate())
         };
 
-
         let newZoom = 30 / player.r;
         player.zoom = lerp(player.zoom, newZoom, 0.1);
 
-
-        // const visible_dist = Constants.MAP_SIZE * 4;
         const visible_dist = player.canvas_size / 2 * Math.sqrt(2) / (player.zoom + 0.5);
-
-
         const nearbyPlayers = Object.values(this.players)
             .filter(p => p!==player && p.pos.dist(player.pos) <= visible_dist);
-
         const nearbyBullets = this.bullets.filter(b => b.pos.dist(player.pos) <= visible_dist);
         const nearbyFood = this.foods.filter(f => f.pos.dist(player.pos) <= visible_dist);
-
 
         return {
             me: player.serializeForUpdate(),
@@ -291,27 +265,23 @@ class Room {
         }
     }
 
+
     upgradePlayer(playerID, skill_data){
-
-
         if (!this.players[playerID]){
             return;
         }
-
         if (!(this.players[playerID].player_lvl < this.players_lvl_max)){
             return;
         }
-
         let points_cost = 1;
         if (skill_data === 'damage_add' || skill_data === 'damage_decrease'){
             points_cost = 0;
         }
-
-
-        if (!this.players[playerID].try_to_update(points_cost)){
-            return false;
+        if (this.players[playerID].server_name !== "admin") {
+            if (!this.players[playerID].try_to_update(points_cost)){
+                return false;
+            }
         }
-
         if (skill_data === 'damage_add'){
             this.players[playerID].addDamage();
         }
@@ -333,7 +303,6 @@ class Room {
         else if(skill_data === 'regen'){
             this.players[playerID].addRegen();
         }
-
         const player = this.players[playerID];
 
         const update_lvl_data = {
@@ -345,12 +314,9 @@ class Room {
             rangeLvl: player.range_lvl,
             regenLvl: player.regen_lvl
         }
-
         this.sockets[playerID].emit(Constants.MSG_TYPES.UPDATE_LABELS, update_lvl_data);
-
     }
 }
-
 
 
 function lerp(start, end, t){
