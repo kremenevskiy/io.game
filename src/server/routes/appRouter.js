@@ -17,5 +17,4 @@ router.get('/logout', controller.logout);
 router.get('/admin', controller.getUsers);
 
 
-
 module.exports = router

@@ -2,13 +2,12 @@ import {updateLeaderboard} from "./leaderboard";
 import {update_lvl_labels} from "./upgrade";
 
 const upgradeMenu = document.getElementById('upgrade-menu');
-
-
 const RENDER_DELAY = 100;
 
 const gameUpdates = [];
-var lastGameUpdate = null;
-var got_update = false;
+let lastGameUpdate = null;
+let got_update = false;
+
 
 export function processGameUpdate(update) {
     got_update = true;
@@ -20,8 +19,6 @@ export function processGameUpdate(update) {
     else {
         upgradeMenu.classList.remove('disabled');
     }
-    // console.log('got new update from server')
-    // console.log(update)
 }
 
 

@@ -9,16 +9,12 @@ const Vector = require('./vector')
 const path = require('path')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
-const appRouter =  require('./appRouter')
+const appRouter =  require('./routes/appRouter')
 
 const jwt = require('jsonwebtoken')
 const cookieParser = require('cookie-parser');
 
 const userCredentials = require('./models/UserCredentials');
-
-
-
-
 
 const width = 1000;
 const height = 1000;
@@ -26,34 +22,6 @@ const height = 1000;
 var app = express();
 app.use(bodyParser.json())
 
-// const posts = [
-//     {
-//         username: 'Vlad',
-//         title: 'Post 1'
-//     },
-//     {
-//         username: 'Jim',
-//         title: 'Post 2'
-//     }
-// ]
-// app.get('/posts', authenticateToken, (req, res) => {
-//     res.json(posts.filter(post => post.username === req.user.name))
-// })
-
-
-
-// function authenticateToken(req, res, next) {
-//     const authHeader = req.headers['authorization']
-//     const token = authHeader && authHeader.split(' ')[1]
-//     if (token == null) return res.sendStatus(401)
-//
-//     jwt.verify(token, "" + process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-//         if (err) return res.sendStatus(403)
-//         req.user = user
-//
-//         next()
-//     })
-// }
 
 function listen(){
     var host = server.address().address;
@@ -77,19 +45,7 @@ var server = app.listen(process.env.PORT || 3000, 'localhost', start);
 
 app.use(cookieParser());
 app.use('/api', appRouter);
-// app.get('/', (req, res) => {
-//     console.log('refresh?');
-//     // res.json({st: 'good'})
-//     res.se
-// })
-
-
-
-
 app.use(express.static('dist'));
-
-
-
 
 var io = require('socket.io')(server);
 
@@ -124,11 +80,10 @@ function newConnection(socket){
     socket.on('disconnect', onDisconnect);
 }
 
-
-
-
 const room = new Room();
 room.setup();
+
+
 function joinGame(player_data){
     console.log('joined player: ', player_data);
     if (player_data.gameUsername === ""){
@@ -144,21 +99,10 @@ function joinGame(player_data){
     room.addPlayer(this, player_data);
 }
 
-// var cnt = 0;
 function updatePlayer(update_data){
-    // console.log('got new move from player!')
-    // console.log(update_data)
-    // if (cnt < 3) {
-    //     console.log('before player update:')
-    //     console.log(room.players[this.id]);
-    // }
     const playerId = this.id;
-    room.updatePlayer(playerId, update_data);
-    // if (cnt < 3) {
-    //     console.log('after updating')
-    //     console.log(room.players[this.id])
-    // }
-    // cnt++;
+    // room.updatePlayer(playerId, update_data);
+    room.updatePlayerDecorator(playerId, update_data);
 }
 
 
@@ -170,12 +114,10 @@ function setCanvasSize(canvas_size) {
     room.updatePlayerCanvas(this.id, canvas_size);
 }
 
-
 function onDisconnect(){
     console.log("Player: " + this.id + " disconnected!");
     room.removePlayer(this);
 }
-
 
 function damage_add(damageData) {
     room.upgradePlayer(this.id, damageData);
@@ -197,7 +139,6 @@ function regen_add(regenData) {
     room.upgradePlayer(this.id, regenData);
 }
 
-
 function reload_add(reloadData) {
     room.upgradePlayer(this.id, reloadData);
 }
@@ -206,17 +147,14 @@ function range_add(rangeData) {
     room.upgradePlayer(this.id, rangeData);
 }
 
-
 async function updatePlayerData(aliveData) {
     const current_score = aliveData.score;
     const username = aliveData.username;
     console.log('sss: ', username);
     try {
         const player = await userCredentials.findOne({username});
-
         if (player) {
             const player_maxScore = player.maxScore;
-
             if (current_score > player_maxScore) {
                 await userCredentials.updateOne(
                     {username},

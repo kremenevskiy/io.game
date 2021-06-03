@@ -31,9 +31,6 @@ function goLogin(event) {
 }
 
 
-
-
-
 // registration handling
 const registration_form = document.getElementById('registration-form');
 registration_form.addEventListener('submit', registerUser);
@@ -41,11 +38,13 @@ const usernameError_registration = document.querySelector('.username.error');
 const passwordError_registration = document.querySelector('.password.error');
 const successRegister = document.querySelector('.register.success');
 
+
 function cleanErrors_registration() {
     usernameError_registration.textContent = '';
     passwordError_registration.textContent = '';
     successRegister.textContent = '';
 }
+
 
 async function registerUser(event){
     event.preventDefault();
@@ -73,8 +72,8 @@ async function registerUser(event){
     }
 }
 
-// login handling
 
+// login handling
 const login_form = document.getElementById('login-form');
 login_form.addEventListener('submit', loginUser);
 const usernameError_login = document.querySelector('.usernameLogin.error');
@@ -100,9 +99,9 @@ function cleanErrors_login() {
 const logged_username = document.getElementById('logged_username');
 const logged_maxScore = document.getElementById('logged_maxScore');
 
-
 let isLogged = false;
 let usernameLogged = '';
+
 
 async function loginUser(event){
     event.preventDefault();
@@ -207,7 +206,6 @@ async function logout(event) {
 }
 
 
-
 const canvas = document.querySelector('canvas');
 const playButton = document.getElementById('play-button');
 const noConnectionButton = document.getElementById('no-connect-button');
@@ -219,9 +217,7 @@ const deadMenu = document.getElementById('dead-menu');
 const deadButton = document.getElementById('dead-button');
 
 const upgradeMenu = document.getElementById('upgrade-menu');
-
 const authMenu = document.getElementById('auth');
-
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
@@ -263,7 +259,6 @@ function playClicked() {
     setTimeout(() => {
         startRendering();
     }, 100);
-
 }
 
 

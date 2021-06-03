@@ -44,6 +44,7 @@ function handleErrors(username, password) {
     return msg_error;
 }
 
+
 function handleErrorsLogin(username, password) {
     let msg_error = {username: '', password: ''};
     if (username.isEmpty) {
@@ -60,6 +61,7 @@ function handleErrorsLogin(username, password) {
     }
     return msg_error;
 }
+
 
 function handleErrorsPassword (newPassword) {
 
@@ -81,7 +83,6 @@ function handleErrorsPassword (newPassword) {
 }
 
 
-
 function noErrors(msg_error) {
     return msg_error.username === '' && msg_error.password === '';
 }
@@ -94,7 +95,6 @@ class appController {
             const errors = validationResult(req);
             let msg_error = {username: '', password: ''};
             if (!errors.isEmpty()){
-
                 msg_error = handleErrors(username, password);
                 return res.status(400).json({status: 'registration_error', error: msg_error});
             }
@@ -115,7 +115,6 @@ class appController {
             }))
 
             await user.save();
-
             res.json({status: 'ok', message: "Successful registration"});
         }
         catch (e){
@@ -123,6 +122,7 @@ class appController {
             return res.status(400).json({status: 'registration_error', error: "Unknown reason"});
         }
     }
+
 
     async login(req, res) {
         try {

@@ -10,8 +10,6 @@ class Bullet extends MovableObject {
         this.r = radius;
         this.parentID = parentID;
         this.damage = damage;
-
-
         this.startPosition = new Vector(x, y);
         this.range_shot = range_shoot + player_r;
     }
@@ -27,7 +25,6 @@ class Bullet extends MovableObject {
             ...(super.serializeForUpdate()),
             r: this.r
         }
-
     }
 }
 

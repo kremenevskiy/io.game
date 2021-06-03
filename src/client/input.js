@@ -9,7 +9,6 @@ import {addRange} from "./networking";
 import {addRegen} from "./networking";
 import {addSpeed} from "./networking";
 
-
 const damageAdd_btn = document.getElementById('dmgUp-btn');
 const damageDec_btn = document.getElementById('dmgDec-btn');
 const healthAdd_btn = document.getElementById('health-btn');
@@ -19,16 +18,13 @@ const speedAdd_btn = document.getElementById('speed-btn');
 const reloadAdd_btn = document.getElementById('reload-btn');
 const upgrade_menu = document.getElementById('upgrade-menu');
 
-
-
-
 const canvas = document.querySelector('canvas')
 
 export var mouseX = 0;
 export var mouseY = 0;
 
-var mouseUp = true;
-var button_pressed = false;
+let mouseUp = true;
+let button_pressed = false;
 
 
 function onMouseMove(event) {
@@ -39,19 +35,12 @@ function onMouseMove(event) {
 
 function onMouseDown(event) {
     mouseUp = false;
-
-    // setTimeout(() => {
-    //     if (button_pressed){
-    //         return;
-    //     }
-    // }, 20);
-
     if (button_pressed){
         button_pressed = false;
         return;
     }
 
-    var shoot_int = setInterval(() => {
+    let shoot_int = setInterval(() => {
         const dir = Math.atan2(mouseY - canvasHeight / 2, mouseX - canvasWidth / 2);
         createBullet(dir)
         if (mouseUp) {
@@ -68,10 +57,8 @@ function onMouseUp(event) {
 
 
 function handleMove(x, y) {
-    // console.log('hangle move');
-    // console.log('size: ' + window.innerWidth/2 + " " + window.innerWidth/2)
     const angle = Math.atan2(y - canvasHeight / 2, x - canvasWidth / 2);
-    var update_data = {
+    const update_data = {
         dir: angle,
         vel_mid: {
             x: mouseX - window.innerWidth / 2,
@@ -83,7 +70,6 @@ function handleMove(x, y) {
 
 
 // listen for upgrade
-
 function onMenuClicked(event){
     button_pressed = true;
 }

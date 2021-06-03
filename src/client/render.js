@@ -2,33 +2,26 @@ import {getCurrentState} from "./state";
 import Constants from "@constants/constants"
 import {canvasHeight, canvasWidth} from "./index";
 
-
-
 const canvas = document.querySelector('canvas');
-var c = canvas.getContext('2d');
+let c = canvas.getContext('2d');
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-var zoom = 1;
+let zoom = 1;
 
 
 function render() {
-    // console.log('start rendering')
-
     if (!getCurrentState()){
-        // console.log('no update yet for render');
         return;
     }
-
     const {me, others, bullets, food} = getCurrentState();
 
     c.clearRect(0, 0, canvas.width, canvas.height);
     c.save();
     c.translate(canvas.width/2, canvas.height/2);
-    var newZoom = 30  / me.r;
+    let newZoom = 30  / me.r;
     zoom = lerp(zoom, newZoom, 0.1);
-
 
     c.scale(zoom + 0.5, zoom + 0.5);
     c.translate(-me.position.x, -me.position.y);
@@ -38,26 +31,21 @@ function render() {
     c.lineWidth = 1;
     c.strokeRect(-Constants.MAP_SIZE, -Constants.MAP_SIZE, Constants.MAP_SIZE*2, Constants.MAP_SIZE*2);
 
-
     food.forEach(foody => renderFood(foody));
     bullets.forEach(bullet => renderBullet(bullet));
-
 
     others.forEach(player => renderPlayer(player));
     renderPlayer(me);
 
     c.restore();
 
-
     // draw score_to_next lvl
-
     c.beginPath();
     c.fillStyle = 'yellow';
     c.fillRect(300, 100,  800, 10);
     c.fillStyle = 'blue';
-    c.fillRect(300, 100,800 *  (1 - ((Math.pow(me.lvl, 2) - me.score_to_next_lvl) / Math.pow(me.lvl, 2))), 10);
-
-
+    c.fillRect(300, 100,800 *  (1 - ((Math.pow(me.lvl, 2) - me.score_to_next_lvl) /
+        Math.pow(me.lvl, 2))), 10);
 
     // Draw score
     c.beginPath();
@@ -65,7 +53,6 @@ function render() {
     c.textAlign = "center";
     c.font = '30px serif';
     let score_msg = "Score: " + me.score.toString();
-    // console.log("mess: " + score_msg);
     c.fillText(score_msg, canvasWidth * 0.08, canvasHeight * 0.08);
     c.fill();
 
@@ -77,22 +64,19 @@ function render() {
     let level_msg = "Level: " + me.lvl.toString();
     c.fillText(level_msg, canvasWidth * 0.08, canvasHeight * 0.15);
 
-
     // draw free point to update
-
     c.beginPath();
     c.fillStyle = "black";
     c.textAlign = "center";
     c.font = '30px serif';
     let points_msg = "Free points: " + me.update_points;
     c.fillText(points_msg, canvasWidth * 0.08, canvasHeight * 0.22);
-
 }
 
-var strokeColor = getRandomColor();
 
+let strokeColor = getRandomColor();
 function renderPlayer(player) {
-    // const {position, r, h, color } = player;
+    // draw player
     c.beginPath();
     c.arc(player.position.x, player.position.y, player.r, 0, Math.PI * 2, false);
     c.fillStyle = player.color;
@@ -110,12 +94,10 @@ function renderPlayer(player) {
     c.fillStyle = 'white';
     c.fillRect(player.position.x - player.r * 0.8, player.position.y - 2, player.r * 2 * 0.8, 4);
     c.fillStyle = 'red';
-    c.fillRect(player.position.x - player.r * 0.8, player.position.y - 2,player.r * 2 * 0.8 * ((1 - ((player.hp_max - player.hp) / player.hp_max))), 4);
-
+    c.fillRect(player.position.x - player.r * 0.8, player.position.y - 2,player.r * 2 * 0.8 *
+        ((1 - ((player.hp_max - player.hp) / player.hp_max))), 4);
     c.fillStyle = player.color;
     c.textAlign = 'center';
-
-
 
     // draw nickname
     c.beginPath();
@@ -130,8 +112,6 @@ function renderPlayer(player) {
     c.strokeText(player.nickname, player.position.x, player.position.y - text_offset);
     c.fillStyle = 'white';
     c.fillText(player.nickname, player.position.x, player.position.y - text_offset);
-
-
 }
 
 
@@ -150,8 +130,8 @@ function renderFood(food){
     c.fill();
 }
 
-let renderInterval = null;
 
+let renderInterval = null;
 export function startRendering() {
     clearInterval(renderInterval)
     renderInterval = setInterval(render, 1000/60);
@@ -162,15 +142,17 @@ export function stopRendering() {
     clearInterval(renderInterval);
 }
 
+
 // interpolation function to smoothly difference
 function lerp(start, end, t){
     return start * (1-t) + end * t;
 }
 
+
 function getRandomColor() {
-    var letters = '0123456789ABCDEF';
-    var color = "#";
-    for (var i = 0; i < 6; ++i) {
+    let letters = '0123456789ABCDEF';
+    let color = "#";
+    for (let i = 0; i < 6; ++i) {
         color += letters[Math.floor(Math.random() * 16)];
     }
     return color;

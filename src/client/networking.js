@@ -6,8 +6,6 @@ const Constants = require('@constants/constants');
 
 export var socket = io.connect(window.location.host, {reconnection: false})
 
-
-
 const connectedPromise = new Promise((resolve, reject) => {
     let connected = false;
     const timeOut = 300;
@@ -60,11 +58,11 @@ export const play = player_data => {
     socket.emit(Constants.MSG_TYPES.CANVAS_GET, canvas_size);
 }
 
+
 export const updateDirection = throttle(100, (update_data) => {
-    // console.log('sending new data to server');
-    // console.log(update_data)
     socket.emit(Constants.MSG_TYPES.UPDATE_INPUT, update_data);
 })
+
 
 export const createBullet = throttle(100, (dir) => {
     socket.emit(Constants.MSG_TYPES.NEW_BULLET, dir);
@@ -72,7 +70,6 @@ export const createBullet = throttle(100, (dir) => {
 
 
 // Update players
-
 export const addDamage = (damageData) => {
     socket.emit(Constants.MSG_TYPES.DAMAGE_ADD, damageData);
 }
