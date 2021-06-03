@@ -1,11 +1,11 @@
-const userCredentials = require('./models/UserCredentials');
-const role = require('./models/Role');
+const userCredentials = require('../models/UserCredentials');
+const role = require('../models/Role');
 
 const {validationResult} = require('express-validator');
 
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const {secret} = require('./config');
+const {secret} = require('../config');
 
 const maxTokenAge = 1000 * 60 * 60; // 1 hour
 
@@ -195,6 +195,16 @@ class appController {
     async logout(req, res) {
         res.cookie('jwt', '', {maxAge: 1});
         res.status(200).json({status: 'ok'});
+    }
+
+    async getUsers(req, res) {
+        try{
+            const users = await userCredentials.find();
+            res.json(users);
+        }
+        catch (e) {
+            console.log('Error in getUsers');
+        }
     }
 }
 
